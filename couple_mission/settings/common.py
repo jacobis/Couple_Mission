@@ -204,9 +204,9 @@ THIRD_PARTY_APPS = (
 LOCAL_APPS = (
     # Project Apps
     'apps.account',
-    'apps.content',
+    'apps.contents',
     'apps.couple',
-    'apps.point',
+    'apps.points',
     'apps.uai',
 )
 

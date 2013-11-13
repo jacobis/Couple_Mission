@@ -8,7 +8,7 @@ from couple_mission.apps.couple.models import Couple
 from couple_mission.libs.utils.storage import getfilesystem
 
 
-class Content(models.Model):
+class Contents(models.Model):
     user = models.ForeignKey(User)
     couple = models.ForeignKey(Couple)
 
@@ -19,26 +19,26 @@ class Comment(Contents):
     content = models.CharField("Content", max_length=200)
 
     class Meta:
-        db_table = "content_comment"
+        db_table = "contents_comment"
 
 class PhotoAlbum(models.Model):
     title = models.CharField("Title", max_length=100)
 
     class Meta:
-        db_table = "content_photo_album"
+        db_table = "contents_photo_album"
 
-class Photo(Content):
+class Photo(Contents):
     album = models.ForeignKey(PhotoAlbum)
     comment = models.ForeignKey(Comment)
     image = models.ImageField("Image", upload_to='photo/', storage=getfilesystem())
     description = models.TextField("Description", default="", blank=True, null=True)
 
     class Meta:
-        db_table = "content_photo"
+        db_table = "contents_photo"
 
-class Letter(Content):
+class Letter(Contents):
     content = models.TextField("Content")
     reading = models.BooleanField("Reading", default=False)
 
     class Meta:
-        db_table = "content_letter"
+        db_table = "contents_letter"
