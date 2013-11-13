@@ -16,3 +16,6 @@ build
 
 # Celerybeat scheduler file:
 celerybeat-schedule
+
+# Mac OS
+.DS_Store
