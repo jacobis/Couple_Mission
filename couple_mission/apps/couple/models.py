@@ -5,7 +5,7 @@ from django.contrib.auth.models import User
 from couple_mission.apps.uai.models import Mission, Badge, Title
 
 
-class couple(models.Model):
+class Couple(models.Model):
     male = models.ForeignKey(User, related_name='male_from', null=True, blank=True)
     female = models.ForeignKey(User, related_name='female_from', null=True, blank=True)
 
@@ -17,7 +17,7 @@ class couple(models.Model):
         member = "%s, %s" % (self.male.username, self.female.username)
         return self.member
 
-class coupleMission(models.Model):
+class CoupleMission(models.Model):
     couple = models.ForeignKey(Couple)
     mission = models.ForeignKey(Mission)
     status = models.BooleanField("Status", default=False)
@@ -25,7 +25,7 @@ class coupleMission(models.Model):
     class Meta:
         db_table = "couple_mission"
 
-class coupleBadge(models.Model):
+class CoupleBadge(models.Model):
     couple = models.ForeignKey(Couple)
     Badge = models.ForeignKey(Badge)
     status = models.BooleanField("Status", default=False)
@@ -33,7 +33,7 @@ class coupleBadge(models.Model):
     class Meta:
         db_table = "couple_badge"
 
-class coupleTitle(models.Model):
+class CoupleTitle(models.Model):
     couple = models.ForeignKey(Couple)
     title = models.ForeignKey(Title)
     status = models.BooleanField("Status", default=False)
@@ -41,7 +41,7 @@ class coupleTitle(models.Model):
     class Meta:
         db_table = "couple_title"
 
-class coupleDday(models.Model):
+class CoupleDday(models.Model):
     couple = models.ForeignKey(Couple)
     date = models.DateField("Date")
     title = models.CharField("Title", max_length=100)
