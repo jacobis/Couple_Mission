@@ -202,6 +202,12 @@ THIRD_PARTY_APPS = (
 )
 
 LOCAL_APPS = (
+    # Project Apps
+    'apps.account',
+    'apps.content',
+    'apps.couple',
+    'apps.point',
+    'apps.uai',
 )
 
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#installed-apps
