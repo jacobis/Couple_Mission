@@ -36,6 +36,7 @@ class Badge(models.Model):
 
 class Title(models.Model):
     name = models.CharField("Name", max_length=100)
+    image = models.ImageField("Image", upload_to='title/', storage=getfilesystem(), blank=True, null=True)
 
     class Meta:
         db_table = "uai_title"

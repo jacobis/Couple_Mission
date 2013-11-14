@@ -27,7 +27,7 @@ class CoupleMission(models.Model):
 
 class CoupleBadge(models.Model):
     couple = models.ForeignKey(Couple)
-    Badge = models.ForeignKey(Badge)
+    badge = models.ForeignKey(Badge)
     status = models.BooleanField("Status", default=False)
 
     class Meta:
