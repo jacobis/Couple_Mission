@@ -32,7 +32,7 @@ class Migration(SchemaMigration):
         db.create_table('couple_badge', (
             (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
             ('couple', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['couple.Couple'])),
-            ('Badge', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['uai.Badge'])),
+            ('badge', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['uai.Badge'])),
             ('status', self.gf('django.db.models.fields.BooleanField')(default=False)),
         ))
         db.send_create_signal(u'couple', ['CoupleBadge'])
@@ -120,8 +120,8 @@ class Migration(SchemaMigration):
             'male': ('django.db.models.fields.related.ForeignKey', [], {'blank': 'True', 'related_name': "'male_from'", 'null': 'True', 'to': u"orm['auth.User']"})
         },
         u'couple.couplebadge': {
-            'Badge': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['uai.Badge']"}),
             'Meta': {'object_name': 'CoupleBadge', 'db_table': "'couple_badge'"},
+            'badge': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['uai.Badge']"}),
             'couple': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['couple.Couple']"}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'status': ('django.db.models.fields.BooleanField', [], {'default': 'False'})
@@ -171,6 +171,7 @@ class Migration(SchemaMigration):
         u'uai.title': {
             'Meta': {'object_name': 'Title'},
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'image': ('django.db.models.fields.files.ImageField', [], {'max_length': '100', 'null': 'True', 'blank': 'True'}),
             'name': ('django.db.models.fields.CharField', [], {'max_length': '100'})
         }
     }
