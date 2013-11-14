@@ -15,7 +15,7 @@ class Couple(models.Model):
 
     def __unicode__(self):
         member = "%s, %s" % (self.male.username, self.female.username)
-        return self.member
+        return member
 
 class CoupleMission(models.Model):
     couple = models.ForeignKey(Couple)
