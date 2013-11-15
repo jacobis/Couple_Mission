@@ -1,6 +1,11 @@
 from django.db import models
-from django.contrib.auth.models import User
+from django.contrib.auth.models import User, AbstractUser, AbstractBaseUser, PermissionsMixin
 
+ 
+class UaiUser(AbstractBaseUser, PermissionsMixin):
+    email = models.EmailField(max_length=255, unique=True)
+
+    USERNAME_FIELD = 'email'
 
 class UserProfile(models.Model):
     user = models.OneToOneField(User, unique=True, primary_key=True)

@@ -1,8 +1,8 @@
 from django.contrib import admin
-from django.contrib.auth.models import User
+from django.contrib.auth.admin import UserAdmin
 
 # Project
-from couple_mission.apps.account.models import UserProfile
+from couple_mission.apps.account.models import UaiUser, UserProfile
 
 
 class AdminUserProfile(admin.ModelAdmin):

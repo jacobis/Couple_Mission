@@ -1,8 +1,8 @@
 from django.contrib import admin
-from django.contrib.auth.models import User
 
 # Project
 from couple_mission.apps.points.models import Points
+from couple_mission.apps.account.models import UaiUser
 from couple_mission.apps.couple.models import Couple, CoupleMission
 
 
