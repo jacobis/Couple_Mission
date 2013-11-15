@@ -6,8 +6,8 @@ from couple_mission.apps.uai.models import Mission, Badge, Title
 
 
 class Couple(models.Model):
-    male = models.ForeignKey(User, related_name='male_from', null=True, blank=True)
-    female = models.ForeignKey(User, related_name='female_from', null=True, blank=True)
+    male = models.ForeignKey(UaiUser, related_name='male_from', null=True, blank=True)
+    female = models.ForeignKey(UaiUser, related_name='female_from', null=True, blank=True)
 
     class Meta:
         unique_together = ("male", "female")

@@ -6,7 +6,7 @@ from couple_mission.apps.couple.models import Couple, CoupleMission
 
 
 class Points(models.Model):
-    user = models.ForeignKey(User)
+    user = models.ForeignKey(UaiUser)
     couple = models.ForeignKey(Couple)
     couple_mission = models.ForeignKey(CoupleMission)
     points = models.IntegerField("Points", default="0")

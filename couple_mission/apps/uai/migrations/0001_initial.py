@@ -39,6 +39,7 @@ class Migration(SchemaMigration):
         db.create_table('uai_title', (
             (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
             ('name', self.gf('django.db.models.fields.CharField')(max_length=100)),
+            ('image', self.gf('django.db.models.fields.files.ImageField')(max_length=100, null=True, blank=True)),
         ))
         db.send_create_signal(u'uai', ['Title'])
 
@@ -82,6 +83,7 @@ class Migration(SchemaMigration):
         u'uai.title': {
             'Meta': {'object_name': 'Title'},
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'image': ('django.db.models.fields.files.ImageField', [], {'max_length': '100', 'null': 'True', 'blank': 'True'}),
             'name': ('django.db.models.fields.CharField', [], {'max_length': '100'})
         }
     }

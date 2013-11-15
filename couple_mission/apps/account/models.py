@@ -1,5 +1,5 @@
 from django.db import models
-from django.contrib.auth.models import User, AbstractUser, AbstractBaseUser, PermissionsMixin
+from django.contrib.auth.models import AbstractUser, AbstractBaseUser, PermissionsMixin
 
  
 class UaiUser(AbstractBaseUser, PermissionsMixin):
@@ -8,7 +8,7 @@ class UaiUser(AbstractBaseUser, PermissionsMixin):
     USERNAME_FIELD = 'email'
 
 class UserProfile(models.Model):
-    user = models.OneToOneField(User, unique=True, primary_key=True)
+    user = models.OneToOneField(UaiUser, unique=True, primary_key=True)
     birthdate = models.DateField("Birth Date", null=True, blank=True)
 
     class Meta:

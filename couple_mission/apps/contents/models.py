@@ -9,7 +9,7 @@ from couple_mission.libs.utils.storage import getfilesystem
 
 
 class Contents(models.Model):
-    user = models.ForeignKey(User)
+    user = models.ForeignKey(UaiUser)
     couple = models.ForeignKey(Couple)
 
     class Meta:
