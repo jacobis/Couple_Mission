@@ -11,6 +11,11 @@ urlpatterns = patterns('',
     # Admin panel and documentation:
     url(r'^admin/doc/', include('django.contrib.admindocs.urls')),
     url(r'^admin/', include(admin.site.urls)),
-    
+
     url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework'))
+)
+
+urlpatterns = patterns('couple_mission.apps.account.views',
+    url(r'users/$', 'user_list'),
+    url(r'user/(?P<pk>[0-9]+)/$', 'user_detail'),
 )
