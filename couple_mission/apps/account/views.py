@@ -5,6 +5,7 @@ from rest_framework.parsers import JSONParser
 from couple_mission.apps.account.models import UaiUser
 from couple_mission.apps.account.serializers import AccountSerializer
 
+
 class JSONResponse(HttpResponse):
     def __init__(self, data, **kwargs):
         content = JSONRenderer().render(data)
