@@ -5,7 +5,7 @@ from couple_mission.apps.account.models import UaiUser
 from couple_mission.apps.account.serializers import AccountSerializer
 
 @api_view(['GET', 'POST'])
-def user_list(request):
+def user_list(request, foramt=None):
     """
     List all users, or create a new user.
     """
@@ -23,7 +23,7 @@ def user_list(request):
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 @api_view(['GET', 'PUT', 'DELETE'])
-def user_detail(request, pk):
+def user_detail(request, pk, format=None):
     """
     Retrieve, update or delete a user instance
     """
