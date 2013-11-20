@@ -1,16 +1,28 @@
+# Django
+from django.contrib.auth.models import User
+
+# REST Framework
 from rest_framework import status
+from rest_framework.authentication import TokenAuthentication
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.decorators import api_view
+from rest_framework.decorators import authentication_classes
+from rest_framework.decorators import permission_classes
 from rest_framework.response import Response
-from couple_mission.apps.account.models import UaiUser
+
+# Project
 from couple_mission.apps.account.serializers import AccountSerializer
 
+
 @api_view(['GET', 'POST'])
+@authentication_classes((TokenAuthentication,))
+@permission_classes((IsAuthenticated,))
 def user_list(request, foramt=None):
     """
     List all users, or create a new user.
     """
     if request.method == 'GET':
-        users = UaiUser.objects.all()
+        users = User.objects.all()
         serializer = AccountSerializer(users, many=True)
         return Response(serializer.data)
 
@@ -28,8 +40,8 @@ def user_detail(request, pk, format=None):
     Retrieve, update or delete a user instance
     """
     try:
-        user = UaiUser.objects.get(pk=pk)
-    except UaiUser.DoseNotExist:
+        user = User.objects.get(pk=pk)
+    except User.DoseNotExist:
         return Response(status=status.HTTP_404_NOT_FOUND)
 
     if request.method == 'GET':

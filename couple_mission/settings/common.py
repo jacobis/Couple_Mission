@@ -199,11 +199,13 @@ THIRD_PARTY_APPS = (
 
     # Asynchronous task queue:
     'djcelery',
+
+    # Django rest framework
+    'rest_framework',
+    'rest_framework.authtoken',
 )
 
 LOCAL_APPS = (
-    'rest_framework',
-
     # Project Apps
     'apps.account',
     'apps.contents',
@@ -292,8 +294,8 @@ REST_FRAMEWORK = {
 
     # Use Django's standard `django.contrib.auth` permissions,
     # or allow read-only access for unauthenticated users.
-    'DEFAULT_PERMISSION_CLASSES': [
-        'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly'
-    ]
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework.authentication.TokenAuthentication',
+    )
 }
 ########## END DJANGO REST FRAMEWORK CONFIGURATION
