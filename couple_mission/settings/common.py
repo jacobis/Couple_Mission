@@ -203,6 +203,8 @@ THIRD_PARTY_APPS = (
     # Django rest framework
     'rest_framework',
     'rest_framework.authtoken',
+
+    'django_extensions',
 )
 
 LOCAL_APPS = (
