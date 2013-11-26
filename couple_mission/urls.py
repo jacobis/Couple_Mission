@@ -5,7 +5,9 @@ from django.conf.urls import patterns, include, url
 from rest_framework import routers
 
 # Projects
-from couple_mission.apps.account import views
+from couple_mission.apps.account.views import UserViewSet
+from couple_mission.apps.couple.views import CoupleViewSet
+from couple_mission.apps.contents.views import CommentViewSet, PhotoAlbumViewSet, PhotoViewSet, LetterViewSet
 
 
 # See: https://docs.djangoproject.com/en/dev/ref/contrib/admin/#hooking-adminsite-instances-into-your-urlconf
@@ -22,6 +24,10 @@ urlpatterns = patterns('',
 )
 
 router = routers.DefaultRouter(trailing_slash=False)
-router.register(r'users', views.UserViewSet)
-# router.register(r'accounts', AccountViewSet)
+router.register(r'users', UserViewSet)
+router.register(r'couples', CoupleViewSet)
+router.register(r'comments', CommentViewSet)
+router.register(r'photo_albums', PhotoAlbumViewSet)
+router.register(r'photos', PhotoViewSet)
+router.register(r'letters', LetterViewSet)
 urlpatterns += router.urls

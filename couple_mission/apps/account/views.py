@@ -3,6 +3,7 @@ from django.contrib.auth.models import User
 
 # REST Framework
 from rest_framework import viewsets
+from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.permissions import IsAuthenticated
@@ -19,7 +20,3 @@ class UserViewSet(viewsets.ModelViewSet):
     serializer_class = AccountSerializer
     # authentication_classes = (TokenAuthentication,)
     # permission_classes = (IsAuthenticated,)
-
-    @action(methods=['POST', 'DELETE'])
-    def singup(self, request):
-        pass
