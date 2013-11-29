@@ -15,11 +15,13 @@ class Contents(models.Model):
     class Meta:
         abstract = True
 
+
 class Comment(Contents):
     content = models.CharField("Content", max_length=200)
 
     class Meta:
         db_table = "contents_comment"
+
 
 class PhotoAlbum(models.Model):
     title = models.CharField("Title", max_length=100)
@@ -27,14 +29,18 @@ class PhotoAlbum(models.Model):
     class Meta:
         db_table = "contents_photo_album"
 
+
 class Photo(Contents):
-    album = models.ForeignKey(PhotoAlbum)
-    comment = models.ForeignKey(Comment)
-    image = models.ImageField("Image", upload_to='photo/', storage=getfilesystem())
-    description = models.TextField("Description", default="", blank=True, null=True)
+    album = models.ForeignKey(PhotoAlbum, default="", blank=True, null=True)
+    comment = models.ForeignKey(Comment, default="", blank=True, null=True)
+    image = models.ImageField(
+        "Image", upload_to='photo/', storage=getfilesystem())
+    description = models.TextField(
+        "Description", default="", blank=True, null=True)
 
     class Meta:
         db_table = "contents_photo"
+
 
 class Letter(Contents):
     content = models.TextField("Content")

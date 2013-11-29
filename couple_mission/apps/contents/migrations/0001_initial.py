@@ -29,8 +29,8 @@ class Migration(SchemaMigration):
             (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
             ('user', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['auth.User'])),
             ('couple', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['couple.Couple'])),
-            ('album', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['contents.PhotoAlbum'])),
-            ('comment', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['contents.Comment'])),
+            ('album', self.gf('django.db.models.fields.related.ForeignKey')(default='', to=orm['contents.PhotoAlbum'], null=True, blank=True)),
+            ('comment', self.gf('django.db.models.fields.related.ForeignKey')(default='', to=orm['contents.Comment'], null=True, blank=True)),
             ('image', self.gf('django.db.models.fields.files.ImageField')(max_length=100)),
             ('description', self.gf('django.db.models.fields.TextField')(default='', null=True, blank=True)),
         ))
@@ -108,8 +108,8 @@ class Migration(SchemaMigration):
         },
         u'contents.photo': {
             'Meta': {'object_name': 'Photo'},
-            'album': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['contents.PhotoAlbum']"}),
-            'comment': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['contents.Comment']"}),
+            'album': ('django.db.models.fields.related.ForeignKey', [], {'default': "''", 'to': u"orm['contents.PhotoAlbum']", 'null': 'True', 'blank': 'True'}),
+            'comment': ('django.db.models.fields.related.ForeignKey', [], {'default': "''", 'to': u"orm['contents.Comment']", 'null': 'True', 'blank': 'True'}),
             'couple': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['couple.Couple']"}),
             'description': ('django.db.models.fields.TextField', [], {'default': "''", 'null': 'True', 'blank': 'True'}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
