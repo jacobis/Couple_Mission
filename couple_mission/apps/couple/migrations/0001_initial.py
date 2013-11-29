@@ -171,7 +171,6 @@ class Migration(SchemaMigration):
         u'uai.title': {
             'Meta': {'object_name': 'Title'},
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'image': ('django.db.models.fields.files.ImageField', [], {'max_length': '100', 'null': 'True', 'blank': 'True'}),
             'name': ('django.db.models.fields.CharField', [], {'max_length': '100'})
         }
     }

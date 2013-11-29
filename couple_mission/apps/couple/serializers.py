@@ -10,12 +10,15 @@ class CoupleSerializer(serializers.ModelSerializer):
         model = Couple
 
     def validate(self, attrs):
-        
+
         if attrs['male'] == attrs['female']:
-            raise serializers.NestedValidationError("Couple is not same each other")
+            raise serializers.NestedValidationError(
+                "Couple is not consist of same user")
         else:
             if Couple.objects.filter(male=attrs['male']).exists() or Couple.objects.filter(female=attrs['male']).exists():
-                raise serializers.ValidationError("%s is already couple" % attrs['male'])
+                raise serializers.ValidationError(
+                    "%s is already couple" % attrs['male'])
             if Couple.objects.filter(male=attrs['female']).exists() or Couple.objects.filter(female=attrs['female']).exists():
-                raise serializers.ValidationError("%s is already couple" % attrs['female'])
+                raise serializers.ValidationError(
+                    "%s is already couple" % attrs['female'])
         return attrs
