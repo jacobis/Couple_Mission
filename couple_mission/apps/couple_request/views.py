@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 # Django
 from django.db.models import Q
 from django.shortcuts import get_object_or_404
@@ -27,22 +29,25 @@ class CoupleRequestViewSet(viewsets.ModelViewSet):
         user_id = request.DATA['user']
         user = User.objects.get(id=user_id)
 
-        if not Couple.objects.filter(Q(male=user)|Q(female=user)):
+        if not Couple.objects.filter(Q(partner_a=user) | Q(partner_b=user)):
             if serializer.is_valid():
                 request_sender = request.DATA['request_sender']
                 request_receiver = request.DATA['request_receiver']
-                requests = CoupleRequest.objects.filter(request_receiver=request_sender, connected=False)
+                requests = CoupleRequest.objects.filter(
+                    request_receiver=request_sender, connected=False)
 
                 if requests:
                     for r in requests:
                         if unicode(r.request_sender) == request_receiver:
-                            couple, created = Couple.objects.get_or_create(male=user, female=r.user)
+                            couple, created = Couple.objects.get_or_create(
+                                partner_a=user, partner_b=r.user)
                             r.connected = True
                             r.save()
-                            
+
                             return Response({'status': 'Congratulation! Couple Connencted.'})
                 else:
-                    CoupleRequest.objects.get_or_create(user=user, request_sender=request_sender, request_receiver=request_receiver)
-                    return Response({'status': 'Wait a sec'})
+                    CoupleRequest.objects.get_or_create(
+                        user=user, request_sender=request_sender, request_receiver=request_receiver)
+                    return Response({'status': 'test'})
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

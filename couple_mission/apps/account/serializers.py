@@ -21,22 +21,16 @@ class UserSerializer(serializers.ModelSerializer):
         model = User
         fields = ('email', 'password', 'first_name', 'last_name')
 
-    def validate_email(self, attrs, source):
-        value = attrs[source]
-
-        try:
-            validate_email(value)
-        except:
-            raise serializers.ValidationError("Email is not normal")
-
-        if User.objects.filter(email=value).exists():
-            raise serializers.ValidationError("Email is exists")
-
-        return attrs
-
     def restore_object(self, attrs, instance=None):
-        if instance:
-            pass
+        if instance is not None:
+            instance.email = attrs.get('email', instance.email)
+            instance.password = attrs.get('password', instance.password)
+            instance.first_name = attrs.get('first_name', instance.first_name)
+            instance.last_name = attrs.get('last_name', instance.last_name)
+            instance.username = attrs.get(
+                'username', instance.email[:instance.email.index('@')])
+            return instance
+
         else:
             email = attrs.get('email')
             password = attrs.get('password')
@@ -45,3 +39,15 @@ class UserSerializer(serializers.ModelSerializer):
             username = email[:email.index('@')]
 
         return User(username=username, email=email, password=password, first_name=first_name, last_name=last_name)
+
+    def validate_email(self, attrs, source):
+        value = attrs[source]
+        try:
+            if self.object.email:
+                raise serializers.ValidationError("Email change")
+                # require editing
+        except:
+            if User.objects.filter(email=value).exists():
+                raise serializers.ValidationError("Email already exists")
+            else:
+                return attrs

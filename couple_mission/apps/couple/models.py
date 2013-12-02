@@ -6,17 +6,17 @@ from couple_mission.apps.uai.models import Mission, Badge, Title
 
 
 class Couple(models.Model):
-    male = models.ForeignKey(
-        User, related_name='male_from', null=True, blank=True)
-    female = models.ForeignKey(
-        User, related_name='female_from', null=True, blank=True)
+    partner_a = models.ForeignKey(
+        User, related_name='partner_a', null=True, blank=True)
+    partner_b = models.ForeignKey(
+        User, related_name='partner_b', null=True, blank=True)
 
     class Meta:
-        unique_together = ("male", "female")
+        unique_together = ("partner_a", "partner_b")
         db_table = "couple"
 
     def __unicode__(self):
-        member = "%s, %s" % (self.male.username, self.female.username)
+        member = "%s, %s" % (self.partner_a.username, self.partner_b.username)
         return member
 
 

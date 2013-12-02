@@ -62,10 +62,10 @@ class Migration(SchemaMigration):
             'name': ('django.db.models.fields.CharField', [], {'max_length': '100'})
         },
         u'couple.couple': {
-            'Meta': {'unique_together': "(('male', 'female'),)", 'object_name': 'Couple', 'db_table': "'couple'"},
-            'female': ('django.db.models.fields.related.ForeignKey', [], {'blank': 'True', 'related_name': "'female_from'", 'null': 'True', 'to': u"orm['auth.User']"}),
+            'Meta': {'unique_together': "(('partner_a', 'partner_b'),)", 'object_name': 'Couple', 'db_table': "'couple'"},
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'male': ('django.db.models.fields.related.ForeignKey', [], {'blank': 'True', 'related_name': "'male_from'", 'null': 'True', 'to': u"orm['auth.User']"})
+            'partner_a': ('django.db.models.fields.related.ForeignKey', [], {'blank': 'True', 'related_name': "'partner_a'", 'null': 'True', 'to': u"orm['auth.User']"}),
+            'partner_b': ('django.db.models.fields.related.ForeignKey', [], {'blank': 'True', 'related_name': "'partner_b'", 'null': 'True', 'to': u"orm['auth.User']"})
         },
         u'couple.couplemission': {
             'Meta': {'object_name': 'CoupleMission', 'db_table': "'couple_mission'"},

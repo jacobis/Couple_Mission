@@ -11,13 +11,13 @@ class Migration(SchemaMigration):
         # Adding model 'Couple'
         db.create_table('couple', (
             (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('male', self.gf('django.db.models.fields.related.ForeignKey')(blank=True, related_name='male_from', null=True, to=orm['auth.User'])),
-            ('female', self.gf('django.db.models.fields.related.ForeignKey')(blank=True, related_name='female_from', null=True, to=orm['auth.User'])),
+            ('partner_a', self.gf('django.db.models.fields.related.ForeignKey')(blank=True, related_name='partner_a', null=True, to=orm['auth.User'])),
+            ('partner_b', self.gf('django.db.models.fields.related.ForeignKey')(blank=True, related_name='partner_b', null=True, to=orm['auth.User'])),
         ))
         db.send_create_signal(u'couple', ['Couple'])
 
-        # Adding unique constraint on 'Couple', fields ['male', 'female']
-        db.create_unique('couple', ['male_id', 'female_id'])
+        # Adding unique constraint on 'Couple', fields ['partner_a', 'partner_b']
+        db.create_unique('couple', ['partner_a_id', 'partner_b_id'])
 
         # Adding model 'CoupleMission'
         db.create_table('couple_mission', (
@@ -57,8 +57,8 @@ class Migration(SchemaMigration):
 
 
     def backwards(self, orm):
-        # Removing unique constraint on 'Couple', fields ['male', 'female']
-        db.delete_unique('couple', ['male_id', 'female_id'])
+        # Removing unique constraint on 'Couple', fields ['partner_a', 'partner_b']
+        db.delete_unique('couple', ['partner_a_id', 'partner_b_id'])
 
         # Deleting model 'Couple'
         db.delete_table('couple')
@@ -114,10 +114,10 @@ class Migration(SchemaMigration):
             'name': ('django.db.models.fields.CharField', [], {'max_length': '100'})
         },
         u'couple.couple': {
-            'Meta': {'unique_together': "(('male', 'female'),)", 'object_name': 'Couple', 'db_table': "'couple'"},
-            'female': ('django.db.models.fields.related.ForeignKey', [], {'blank': 'True', 'related_name': "'female_from'", 'null': 'True', 'to': u"orm['auth.User']"}),
+            'Meta': {'unique_together': "(('partner_a', 'partner_b'),)", 'object_name': 'Couple', 'db_table': "'couple'"},
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'male': ('django.db.models.fields.related.ForeignKey', [], {'blank': 'True', 'related_name': "'male_from'", 'null': 'True', 'to': u"orm['auth.User']"})
+            'partner_a': ('django.db.models.fields.related.ForeignKey', [], {'blank': 'True', 'related_name': "'partner_a'", 'null': 'True', 'to': u"orm['auth.User']"}),
+            'partner_b': ('django.db.models.fields.related.ForeignKey', [], {'blank': 'True', 'related_name': "'partner_b'", 'null': 'True', 'to': u"orm['auth.User']"})
         },
         u'couple.couplebadge': {
             'Meta': {'object_name': 'CoupleBadge', 'db_table': "'couple_badge'"},

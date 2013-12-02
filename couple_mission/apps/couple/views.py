@@ -10,6 +10,6 @@ from rest_framework.decorators import action, link
 from couple_mission.apps.couple.models import Couple
 from couple_mission.apps.couple.serializers import CoupleSerializer
 
-class CoupleViewSet(viewsets.ModelViewSet):
+class CoupleViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Couple.objects.all()
     serializer_class = CoupleSerializer
