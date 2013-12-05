@@ -11,6 +11,8 @@ class Migration(SchemaMigration):
         # Adding model 'Comment'
         db.create_table('contents_comment', (
             (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
+            ('created_at', self.gf('django.db.models.fields.DateTimeField')(auto_now_add=True, blank=True)),
+            ('updated_at', self.gf('django.db.models.fields.DateTimeField')(auto_now=True, blank=True)),
             ('user', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['auth.User'])),
             ('couple', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['couple.Couple'])),
             ('content', self.gf('django.db.models.fields.CharField')(max_length=200)),
@@ -20,6 +22,10 @@ class Migration(SchemaMigration):
         # Adding model 'PhotoAlbum'
         db.create_table('contents_photo_album', (
             (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
+            ('created_at', self.gf('django.db.models.fields.DateTimeField')(auto_now_add=True, blank=True)),
+            ('updated_at', self.gf('django.db.models.fields.DateTimeField')(auto_now=True, blank=True)),
+            ('user', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['auth.User'])),
+            ('couple', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['couple.Couple'])),
             ('title', self.gf('django.db.models.fields.CharField')(max_length=100)),
         ))
         db.send_create_signal(u'contents', ['PhotoAlbum'])
@@ -27,6 +33,8 @@ class Migration(SchemaMigration):
         # Adding model 'Photo'
         db.create_table('contents_photo', (
             (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
+            ('created_at', self.gf('django.db.models.fields.DateTimeField')(auto_now_add=True, blank=True)),
+            ('updated_at', self.gf('django.db.models.fields.DateTimeField')(auto_now=True, blank=True)),
             ('user', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['auth.User'])),
             ('couple', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['couple.Couple'])),
             ('album', self.gf('django.db.models.fields.related.ForeignKey')(default='', to=orm['contents.PhotoAlbum'], null=True, blank=True)),
@@ -39,6 +47,8 @@ class Migration(SchemaMigration):
         # Adding model 'Letter'
         db.create_table('contents_letter', (
             (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
+            ('created_at', self.gf('django.db.models.fields.DateTimeField')(auto_now_add=True, blank=True)),
+            ('updated_at', self.gf('django.db.models.fields.DateTimeField')(auto_now=True, blank=True)),
             ('user', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['auth.User'])),
             ('couple', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['couple.Couple'])),
             ('content', self.gf('django.db.models.fields.TextField')()),
@@ -95,15 +105,19 @@ class Migration(SchemaMigration):
             'Meta': {'object_name': 'Comment'},
             'content': ('django.db.models.fields.CharField', [], {'max_length': '200'}),
             'couple': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['couple.Couple']"}),
+            'created_at': ('django.db.models.fields.DateTimeField', [], {'auto_now_add': 'True', 'blank': 'True'}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'updated_at': ('django.db.models.fields.DateTimeField', [], {'auto_now': 'True', 'blank': 'True'}),
             'user': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['auth.User']"})
         },
         u'contents.letter': {
             'Meta': {'object_name': 'Letter'},
             'content': ('django.db.models.fields.TextField', [], {}),
             'couple': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['couple.Couple']"}),
+            'created_at': ('django.db.models.fields.DateTimeField', [], {'auto_now_add': 'True', 'blank': 'True'}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'reading': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
+            'updated_at': ('django.db.models.fields.DateTimeField', [], {'auto_now': 'True', 'blank': 'True'}),
             'user': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['auth.User']"})
         },
         u'contents.photo': {
@@ -111,15 +125,21 @@ class Migration(SchemaMigration):
             'album': ('django.db.models.fields.related.ForeignKey', [], {'default': "''", 'to': u"orm['contents.PhotoAlbum']", 'null': 'True', 'blank': 'True'}),
             'comment': ('django.db.models.fields.related.ForeignKey', [], {'default': "''", 'to': u"orm['contents.Comment']", 'null': 'True', 'blank': 'True'}),
             'couple': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['couple.Couple']"}),
+            'created_at': ('django.db.models.fields.DateTimeField', [], {'auto_now_add': 'True', 'blank': 'True'}),
             'description': ('django.db.models.fields.TextField', [], {'default': "''", 'null': 'True', 'blank': 'True'}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'image': ('django.db.models.fields.files.ImageField', [], {'max_length': '100'}),
+            'updated_at': ('django.db.models.fields.DateTimeField', [], {'auto_now': 'True', 'blank': 'True'}),
             'user': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['auth.User']"})
         },
         u'contents.photoalbum': {
             'Meta': {'object_name': 'PhotoAlbum', 'db_table': "'contents_photo_album'"},
+            'couple': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['couple.Couple']"}),
+            'created_at': ('django.db.models.fields.DateTimeField', [], {'auto_now_add': 'True', 'blank': 'True'}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'title': ('django.db.models.fields.CharField', [], {'max_length': '100'})
+            'title': ('django.db.models.fields.CharField', [], {'max_length': '100'}),
+            'updated_at': ('django.db.models.fields.DateTimeField', [], {'auto_now': 'True', 'blank': 'True'}),
+            'user': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['auth.User']"})
         },
         u'contenttypes.contenttype': {
             'Meta': {'ordering': "('name',)", 'unique_together': "(('app_label', 'model'),)", 'object_name': 'ContentType', 'db_table': "'django_content_type'"},
@@ -130,9 +150,11 @@ class Migration(SchemaMigration):
         },
         u'couple.couple': {
             'Meta': {'unique_together': "(('partner_a', 'partner_b'),)", 'object_name': 'Couple', 'db_table': "'couple'"},
+            'created_at': ('django.db.models.fields.DateTimeField', [], {'auto_now_add': 'True', 'blank': 'True'}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'partner_a': ('django.db.models.fields.related.ForeignKey', [], {'blank': 'True', 'related_name': "'partner_a'", 'null': 'True', 'to': u"orm['auth.User']"}),
-            'partner_b': ('django.db.models.fields.related.ForeignKey', [], {'blank': 'True', 'related_name': "'partner_b'", 'null': 'True', 'to': u"orm['auth.User']"})
+            'partner_b': ('django.db.models.fields.related.ForeignKey', [], {'blank': 'True', 'related_name': "'partner_b'", 'null': 'True', 'to': u"orm['auth.User']"}),
+            'updated_at': ('django.db.models.fields.DateTimeField', [], {'auto_now': 'True', 'blank': 'True'})
         }
     }
 

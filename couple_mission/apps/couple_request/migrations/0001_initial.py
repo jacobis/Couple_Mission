@@ -11,6 +11,8 @@ class Migration(SchemaMigration):
         # Adding model 'CoupleRequest'
         db.create_table('couple_request', (
             (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
+            ('created_at', self.gf('django.db.models.fields.DateTimeField')(auto_now_add=True, blank=True)),
+            ('updated_at', self.gf('django.db.models.fields.DateTimeField')(auto_now=True, blank=True)),
             ('user', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['auth.User'])),
             ('request_sender', self.gf('phonenumber_field.modelfields.PhoneNumberField')(max_length=128)),
             ('request_receiver', self.gf('phonenumber_field.modelfields.PhoneNumberField')(max_length=128)),
@@ -64,9 +66,11 @@ class Migration(SchemaMigration):
         u'couple_request.couplerequest': {
             'Meta': {'object_name': 'CoupleRequest', 'db_table': "'couple_request'"},
             'connected': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
+            'created_at': ('django.db.models.fields.DateTimeField', [], {'auto_now_add': 'True', 'blank': 'True'}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'request_receiver': ('phonenumber_field.modelfields.PhoneNumberField', [], {'max_length': '128'}),
             'request_sender': ('phonenumber_field.modelfields.PhoneNumberField', [], {'max_length': '128'}),
+            'updated_at': ('django.db.models.fields.DateTimeField', [], {'auto_now': 'True', 'blank': 'True'}),
             'user': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['auth.User']"})
         }
     }

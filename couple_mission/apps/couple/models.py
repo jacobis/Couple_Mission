@@ -4,8 +4,11 @@ from django.db import models
 from couple_mission.apps.account.models import User
 from couple_mission.apps.uai.models import Mission, Badge, Title
 
+# Project Libs
+from couple_mission.libs.common.model import TimeStampModel
 
-class Couple(models.Model):
+
+class Couple(TimeStampModel):
     partner_a = models.ForeignKey(
         User, related_name='partner_a', null=True, blank=True)
     partner_b = models.ForeignKey(
@@ -20,7 +23,7 @@ class Couple(models.Model):
         return member
 
 
-class CoupleMission(models.Model):
+class CoupleMission(TimeStampModel):
     couple = models.ForeignKey(Couple)
     mission = models.ForeignKey(Mission)
     status = models.BooleanField("Status", default=False)
@@ -29,7 +32,7 @@ class CoupleMission(models.Model):
         db_table = "couple_mission"
 
 
-class CoupleBadge(models.Model):
+class CoupleBadge(TimeStampModel):
     couple = models.ForeignKey(Couple)
     badge = models.ForeignKey(Badge)
     status = models.BooleanField("Status", default=False)
@@ -38,7 +41,7 @@ class CoupleBadge(models.Model):
         db_table = "couple_badge"
 
 
-class CoupleTitle(models.Model):
+class CoupleTitle(TimeStampModel):
     couple = models.ForeignKey(Couple)
     title = models.ForeignKey(Title)
     status = models.BooleanField("Status", default=False)
@@ -47,7 +50,7 @@ class CoupleTitle(models.Model):
         db_table = "couple_title"
 
 
-class CoupleDday(models.Model):
+class CoupleDday(TimeStampModel):
     couple = models.ForeignKey(Couple)
     date = models.DateField("Date")
     title = models.CharField("Title", max_length=100)

@@ -4,8 +4,11 @@ from django.db import models
 from couple_mission.apps.account.models import User
 from couple_mission.apps.couple.models import Couple, CoupleMission
 
+# Project Libs
+from couple_mission.libs.common.model import TimeStampModel
 
-class Points(models.Model):
+
+class Points(TimeStampModel):
     user = models.ForeignKey(User)
     couple = models.ForeignKey(Couple)
     couple_mission = models.ForeignKey(CoupleMission)

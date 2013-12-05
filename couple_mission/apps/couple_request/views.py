@@ -2,8 +2,8 @@
 
 # Django
 from django.db.models import Q
-from django.shortcuts import get_object_or_404
 from django.contrib.auth.models import User
+from django.utils.translation import ugettext as _
 
 # REST Framework
 from rest_framework import viewsets
@@ -44,10 +44,11 @@ class CoupleRequestViewSet(viewsets.ModelViewSet):
                             r.connected = True
                             r.save()
 
-                            return Response({'status': 'Congratulation! Couple Connencted.'})
+                            return Response({'success': True, 'message': _(u'Congratulation! Couple Connencted.')}, status=status.HTTP_201_CREATED)
                 else:
                     CoupleRequest.objects.get_or_create(
                         user=user, request_sender=request_sender, request_receiver=request_receiver)
-                    return Response({'status': 'test'})
-        else:
-            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+                    return Response({'success': True, 'message': _(u'Waiting for response from partner.')}, status=status.HTTP_200_OK)
+
+        return Response({'success': False, 'message': _(u'%s' % serializer.errors)}, status=status.HTTP_400_BAD_REQUEST)

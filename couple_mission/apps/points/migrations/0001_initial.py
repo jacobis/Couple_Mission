@@ -11,6 +11,8 @@ class Migration(SchemaMigration):
         # Adding model 'Points'
         db.create_table('points', (
             (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
+            ('created_at', self.gf('django.db.models.fields.DateTimeField')(auto_now_add=True, blank=True)),
+            ('updated_at', self.gf('django.db.models.fields.DateTimeField')(auto_now=True, blank=True)),
             ('user', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['auth.User'])),
             ('couple', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['couple.Couple'])),
             ('couple_mission', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['couple.CoupleMission'])),
@@ -63,38 +65,48 @@ class Migration(SchemaMigration):
         },
         u'couple.couple': {
             'Meta': {'unique_together': "(('partner_a', 'partner_b'),)", 'object_name': 'Couple', 'db_table': "'couple'"},
+            'created_at': ('django.db.models.fields.DateTimeField', [], {'auto_now_add': 'True', 'blank': 'True'}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'partner_a': ('django.db.models.fields.related.ForeignKey', [], {'blank': 'True', 'related_name': "'partner_a'", 'null': 'True', 'to': u"orm['auth.User']"}),
-            'partner_b': ('django.db.models.fields.related.ForeignKey', [], {'blank': 'True', 'related_name': "'partner_b'", 'null': 'True', 'to': u"orm['auth.User']"})
+            'partner_b': ('django.db.models.fields.related.ForeignKey', [], {'blank': 'True', 'related_name': "'partner_b'", 'null': 'True', 'to': u"orm['auth.User']"}),
+            'updated_at': ('django.db.models.fields.DateTimeField', [], {'auto_now': 'True', 'blank': 'True'})
         },
         u'couple.couplemission': {
             'Meta': {'object_name': 'CoupleMission', 'db_table': "'couple_mission'"},
             'couple': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['couple.Couple']"}),
+            'created_at': ('django.db.models.fields.DateTimeField', [], {'auto_now_add': 'True', 'blank': 'True'}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'mission': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['uai.Mission']"}),
-            'status': ('django.db.models.fields.BooleanField', [], {'default': 'False'})
+            'status': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
+            'updated_at': ('django.db.models.fields.DateTimeField', [], {'auto_now': 'True', 'blank': 'True'})
         },
         u'points.points': {
             'Meta': {'object_name': 'Points', 'db_table': "'points'"},
             'couple': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['couple.Couple']"}),
             'couple_mission': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['couple.CoupleMission']"}),
+            'created_at': ('django.db.models.fields.DateTimeField', [], {'auto_now_add': 'True', 'blank': 'True'}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'points': ('django.db.models.fields.IntegerField', [], {'default': "'0'"}),
+            'updated_at': ('django.db.models.fields.DateTimeField', [], {'auto_now': 'True', 'blank': 'True'}),
             'user': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['auth.User']"})
         },
         u'uai.mission': {
             'Meta': {'object_name': 'Mission'},
             'category': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['uai.MissionCategory']"}),
+            'created_at': ('django.db.models.fields.DateTimeField', [], {'auto_now_add': 'True', 'blank': 'True'}),
             'description': ('django.db.models.fields.TextField', [], {'default': "''", 'null': 'True', 'blank': 'True'}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'image': ('django.db.models.fields.files.ImageField', [], {'max_length': '100', 'null': 'True', 'blank': 'True'}),
             'point': ('django.db.models.fields.IntegerField', [], {'default': "'0'"}),
-            'title': ('django.db.models.fields.CharField', [], {'max_length': '200'})
+            'title': ('django.db.models.fields.CharField', [], {'max_length': '200'}),
+            'updated_at': ('django.db.models.fields.DateTimeField', [], {'auto_now': 'True', 'blank': 'True'})
         },
         u'uai.missioncategory': {
             'Meta': {'object_name': 'MissionCategory', 'db_table': "'uai_mission_category'"},
+            'created_at': ('django.db.models.fields.DateTimeField', [], {'auto_now_add': 'True', 'blank': 'True'}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'name': ('django.db.models.fields.CharField', [], {'max_length': '100'})
+            'name': ('django.db.models.fields.CharField', [], {'max_length': '100'}),
+            'updated_at': ('django.db.models.fields.DateTimeField', [], {'auto_now': 'True', 'blank': 'True'})
         }
     }
 

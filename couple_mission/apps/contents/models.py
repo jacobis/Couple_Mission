@@ -4,11 +4,12 @@ from django.contrib.auth.models import User
 # Project
 from couple_mission.apps.couple.models import Couple
 
-# Project Utils
+# Project Libs
+from couple_mission.libs.common.model import TimeStampModel
 from couple_mission.libs.utils.storage import getfilesystem
 
 
-class Contents(models.Model):
+class Contents(TimeStampModel):
     user = models.ForeignKey(User)
     couple = models.ForeignKey(Couple)
 
@@ -23,7 +24,7 @@ class Comment(Contents):
         db_table = "contents_comment"
 
 
-class PhotoAlbum(models.Model):
+class PhotoAlbum(Contents):
     title = models.CharField("Title", max_length=100)
 
     class Meta:

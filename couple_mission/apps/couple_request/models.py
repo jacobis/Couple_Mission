@@ -4,8 +4,11 @@ from phonenumber_field.modelfields import PhoneNumberField
 
 from couple_mission.apps.account.models import User
 
+# Project Libs
+from couple_mission.libs.common.model import TimeStampModel
 
-class CoupleRequest(models.Model):
+
+class CoupleRequest(TimeStampModel):
     user = models.ForeignKey(User)
     request_sender = PhoneNumberField(help_text='E.g +41524204242')
     request_receiver = PhoneNumberField(help_text='E.g +41524204242')

@@ -3,6 +3,7 @@ from django.conf.urls import patterns, include, url
 
 # Django REST Framework
 from rest_framework import routers
+from rest_framework.authtoken.views import obtain_auth_token
 
 # Projects
 from couple_mission.apps.account.views import UserViewSet
@@ -23,10 +24,11 @@ urlpatterns = patterns('',
                        url(r'^admin/doc/', include(
                            'django.contrib.admindocs.urls')),
                        url(r'^admin/', include(admin.site.urls)),
-
-                       url(r'^api-auth/', include(
-                           'rest_framework.urls', namespace='rest_framework'))
                        )
+
+urlpatterns += patterns('',
+                        url(r'^login/', 'couple_mission.apps.account.views.login'),
+                        )
 
 router = routers.DefaultRouter(trailing_slash=False)
 router.register(r'users', UserViewSet)

@@ -10,6 +10,8 @@ class Migration(SchemaMigration):
     def forwards(self, orm):
         # Adding model 'UserProfile'
         db.create_table('account_user_profile', (
+            ('created_at', self.gf('django.db.models.fields.DateTimeField')(auto_now_add=True, blank=True)),
+            ('updated_at', self.gf('django.db.models.fields.DateTimeField')(auto_now=True, blank=True)),
             ('user', self.gf('django.db.models.fields.related.OneToOneField')(to=orm['auth.User'], unique=True, primary_key=True)),
             ('birthdate', self.gf('django.db.models.fields.DateField')(null=True, blank=True)),
         ))
@@ -25,6 +27,8 @@ class Migration(SchemaMigration):
         u'account.userprofile': {
             'Meta': {'object_name': 'UserProfile', 'db_table': "'account_user_profile'"},
             'birthdate': ('django.db.models.fields.DateField', [], {'null': 'True', 'blank': 'True'}),
+            'created_at': ('django.db.models.fields.DateTimeField', [], {'auto_now_add': 'True', 'blank': 'True'}),
+            'updated_at': ('django.db.models.fields.DateTimeField', [], {'auto_now': 'True', 'blank': 'True'}),
             'user': ('django.db.models.fields.related.OneToOneField', [], {'to': u"orm['auth.User']", 'unique': 'True', 'primary_key': 'True'})
         },
         u'auth.group': {
