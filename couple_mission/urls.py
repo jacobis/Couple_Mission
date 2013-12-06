@@ -6,7 +6,7 @@ from rest_framework import routers
 from rest_framework.authtoken.views import obtain_auth_token
 
 # Projects
-from couple_mission.apps.account.views import UserViewSet
+from couple_mission.apps.account.views import UserViewSet, UserProfileViewSet
 from couple_mission.apps.couple_request.views import CoupleRequestViewSet
 from couple_mission.apps.couple.views import CoupleViewSet
 from couple_mission.apps.contents.views import CommentViewSet, PhotoAlbumViewSet, PhotoViewSet, LetterViewSet
@@ -26,12 +26,14 @@ urlpatterns = patterns('',
                        url(r'^admin/', include(admin.site.urls)),
                        )
 
-urlpatterns += patterns('',
-                        url(r'^login/', 'couple_mission.apps.account.views.login'),
+urlpatterns += patterns('couple_mission.apps.account',
+                        url(r'^login$', 'views.obtain_auth_token'),
+                        url(r'^me$', 'views.me'),
                         )
 
 router = routers.DefaultRouter(trailing_slash=False)
 router.register(r'users', UserViewSet)
+router.register(r'user_profiles', UserProfileViewSet)
 router.register(r'couple_requests', CoupleRequestViewSet)
 router.register(r'couples', CoupleViewSet)
 router.register(r'mission_categories', MissionCategoryViewSet)
