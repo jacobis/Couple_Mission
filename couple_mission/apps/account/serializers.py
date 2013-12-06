@@ -2,6 +2,8 @@ import re
 
 from django.contrib.auth.models import User
 from django.core.validators import validate_email
+from django.contrib.auth import authenticate
+from django.contrib.auth.hashers import make_password
 
 from rest_framework import serializers
 from rest_framework.authtoken.models import Token
@@ -13,7 +15,8 @@ class UserProfileSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = UserProfile
-        fields = ('birthdate',)
+        fields = ('user', 'birthdate', 'gender', 'image')
+        read_only_fields = ('user',)
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -51,8 +54,35 @@ class UserSerializer(serializers.ModelSerializer):
         else:
             email = attrs.get('email')
             password = attrs.get('password')
+            password = make_password(password)
             first_name = attrs.get('first_name', '')
             last_name = attrs.get('last_name', '')
             username = email[:email.index('@')]
 
-        return User(username=username, email=email, password=password, first_name=first_name, last_name=last_name)
+            return User(username=username, email=email, password=password, first_name=first_name, last_name=last_name)
+
+
+class AuthTokenSerializer(serializers.Serializer):
+    email = serializers.CharField()
+    password = serializers.CharField()
+
+    def validate(self, attrs):
+        email = attrs.get('email')
+        password = attrs.get('password')
+        username = User.objects.get(email=email)
+
+        if username and password:
+            user = authenticate(username=username, password=password)
+
+            if user:
+                if not user.is_active:
+                    raise serializers.ValidationError(
+                        'User account is disabled.')
+                attrs['user'] = user
+                return attrs
+            else:
+                raise serializers.ValidationError(
+                    'Unable to login with provided credentials.')
+        else:
+            raise serializers.ValidationError(
+                'Must include "email" and "password"')
