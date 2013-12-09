@@ -39,8 +39,9 @@ class PhotoAlbumViewSet(viewsets.ModelViewSet):
         return Response({'success': True, 'data': serializer.data}, status=status.HTTP_200_OK)
 
     def create(self, request):
+        # Todo
         user = request.user
-        couple = CoupleController.get_couple(request.user)
+        couple = CoupleController.get_couple(user)
 
         title = request.DATA.get('title')
 
