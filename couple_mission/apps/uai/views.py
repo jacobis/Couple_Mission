@@ -1,8 +1,11 @@
 import datetime
 
+from django.shortcuts import render
+
 # REST Framework
 from rest_framework import viewsets
 from rest_framework import status
+from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.permissions import IsAuthenticated
@@ -13,15 +16,24 @@ from couple_mission.apps.uai.models import MissionCategory, Mission, Badge, Titl
 from couple_mission.apps.couple.models import CoupleMission
 from couple_mission.apps.uai.serializers import MissionCategorySerializer, MissionSerializer, BadgeSerializer, TitleSerializer
 
+from couple_mission.apps.uai.mission_handler import MissionHandler
+
 
 class MissionCategoryViewSet(viewsets.ModelViewSet):
     queryset = MissionCategory.objects.all()
     serializer_class = MissionCategorySerializer
 
 
-class MissionViewSet(viewsets.ModelViewSet):
-    queryset = Mission.objects.all()
-    serializer_class = MissionSerializer
+class MissionView(APIView):
+    models = Mission
+    # permission_classes = (IsAuthenticated,)
+
+    def get(self, request, format=None):
+        print format
+        return Response('12')
+
+    # def post(self, request):
+    #     return Response('12')
 
 
 class BadgeViewSet(viewsets.ModelViewSet):
@@ -43,3 +55,15 @@ class Mission():
             mission = Mission.objects.get(id=1)
             mission.status = True
             return Response({'status': "Congratulation! You get 10 points."})
+
+
+def mission_detail_view(request, mission_id):
+    mission_handler = MissionHandler(request, mission_id)
+    if not mission_handler.has_cleared():
+        mission_result = mission_handler.do_mission()
+
+    raise ValueError('end')
+
+
+def main_index(request):
+    return render(request, 'index.html')

@@ -35,6 +35,36 @@ class PhotoAlbumViewSet(viewsets.ModelViewSet):
 class PhotoViewSet(viewsets.ModelViewSet):
     queryset = Photo.objects.all()
     serializer_class = PhotoSerializer
+    permission_classes = (IsAuthenticated,)
+
+    def list(self, request):
+        couple_object = CoupleController.get_couple(request.user)
+        photos = Photo.objects.filter(couple=couple_object)
+        serializer = PhotoSerializer(photos, many=True)
+        return Response({'success': True, 'data': serializer.data}, status=status.HTTP_200_OK)
+
+    def create(self, request, *args, **kwargs):
+        user = request.user
+        couple = CoupleController.get_couple(request.user)
+
+        try:
+            album_pk = request.DATA.get('album')
+            album = PhotoAlbum.objects.get(pk=album_pk)
+
+        except Exception as e:
+            print e
+            return Response({'success': False, 'message': _(u'앨범')}, status=status.HTTP_400_BAD_REQUEST)
+
+        try:
+            image = request.FILES.get('image')
+        except:
+            return Response({'success': False, 'message': _(u'사진 업로드 실패')}, status=status.HTTP_400_BAD_REQUEST)
+        description = request.DATA.get('description')
+
+        photo = Photo.objects.create(
+            user=user, couple=couple, album=album, image=image, description=description)
+
+        return Response({'success': True, 'data': {'photo_pk': photo.pk}}, status=status.HTTP_200_OK)
 
 
 class LetterViewSet(viewsets.ModelViewSet):
@@ -45,7 +75,6 @@ class LetterViewSet(viewsets.ModelViewSet):
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.DATA)
         user = request.user
-        raise ValueError(123)
         couple_id = request.couple_id
         couple = Couple.objects.get(id=couple_id)
 

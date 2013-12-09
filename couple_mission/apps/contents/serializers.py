@@ -9,15 +9,18 @@ class CommentSerializer(serializers.ModelSerializer):
     class Meta:
         model = Comment
 
+
 class PhotoAlbumSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = PhotoAlbum
 
+
 class PhotoSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Photo
+
 
 class LetterSerializer(serializers.ModelSerializer):
 

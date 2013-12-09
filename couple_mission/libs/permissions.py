@@ -1,24 +1,16 @@
 from rest_framework import permissions
 
-
-class IsOwnerOrReadOnly(permissions.BasePermission):
-
-    def has_object_permission(self, request, view, obj):
-        print '123'
-
-        if request.method in permissions.SAFE_METHODS:
-            return True
-
-        return obj.owner == request.user
+from couple_mission.apps.couple.controller import CoupleController
 
 
-class IsAuthenticatedOrCreateOnly(permissions.BasePermission):
+class IsOwnerOrCoupleOnly(permissions.BasePermission):
 
     def has_object_permission(self, request, view, obj):
-        print '123'
-        print request.method
 
-        if request.method is 'CREATE':
-            return True
+        is_owner = bool(obj.user == request.user)
+        is_couple = bool(CoupleController.get_couple(request.user))
 
-        return obj.owner == request.user
+        print is_owner
+        print is_couple
+
+        return is_owner or is_couple

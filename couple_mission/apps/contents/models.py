@@ -24,7 +24,8 @@ class Comment(Contents):
         db_table = "contents_comment"
 
 
-class PhotoAlbum(Contents):
+class PhotoAlbum(TimeStampModel):
+    couple = models.ForeignKey(Couple, related_name="photo_albums")
     title = models.CharField("Title", max_length=100)
 
     class Meta:
@@ -41,6 +42,7 @@ class Photo(Contents):
 
     class Meta:
         db_table = "contents_photo"
+        ordering = ['-created_at']
 
 
 class Letter(Contents):

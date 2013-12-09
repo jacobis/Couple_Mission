@@ -10,7 +10,7 @@ from couple_mission.apps.account.views import UserViewSet, UserProfileViewSet
 from couple_mission.apps.couple_request.views import CoupleRequestViewSet
 from couple_mission.apps.couple.views import CoupleViewSet
 from couple_mission.apps.contents.views import CommentViewSet, PhotoAlbumViewSet, PhotoViewSet, LetterViewSet
-from couple_mission.apps.uai.views import MissionCategoryViewSet, MissionViewSet, BadgeViewSet, TitleViewSet
+from couple_mission.apps.uai.views import MissionCategoryViewSet, MissionView, BadgeViewSet, TitleViewSet
 
 
 # See:
@@ -31,13 +31,23 @@ urlpatterns += patterns('couple_mission.apps.account',
                         url(r'^me$', 'views.me'),
                         )
 
+urlpatterns += patterns('couple_mission.apps.uai',
+                        url(r'^mission/(?P<mission_id>\w+)$',
+                            'views.mission_detail_view', name='mission_detail'),
+                        )
+
+urlpatterns += patterns('couple_mission.apps.uai',
+                        url(r'^$',
+                            'views.main_index'),
+                        )
+
 router = routers.DefaultRouter(trailing_slash=False)
 router.register(r'users', UserViewSet)
 router.register(r'user_profiles', UserProfileViewSet)
 router.register(r'couple_requests', CoupleRequestViewSet)
 router.register(r'couples', CoupleViewSet)
 router.register(r'mission_categories', MissionCategoryViewSet)
-router.register(r'missions', MissionViewSet)
+# router.register(r'missions', MissionView)
 router.register(r'badges', BadgeViewSet)
 router.register(r'titles', TitleViewSet)
 router.register(r'comments', CommentViewSet)

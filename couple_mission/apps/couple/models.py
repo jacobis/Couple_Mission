@@ -13,6 +13,7 @@ class Couple(TimeStampModel):
         User, related_name='partner_a', null=True, blank=True)
     partner_b = models.ForeignKey(
         User, related_name='partner_b', null=True, blank=True)
+    first_date = models.DateField("Date", null=True, blank=True)
 
     class Meta:
         unique_together = ("partner_a", "partner_b")
