@@ -63,5 +63,50 @@ class MissionHandler():
     #     return None
 
     def do_mission_1(self):
+
+        first_name = self.DATA.get('first_name', None)
+        last_name = self.DATA.get('last_name', None)
+        gender = self.DATA.get('gender', None)
+        birthdate = self.DATA.get('birthdate', None)
+        first_date = self.DATA.get('first_date', None)
+
+        image = self.FILES.get('image', None)
+
+        error_dic = self.__validate__(
+            first_name, last_name, gender, birthdate, first_date)
+
+        if error_dic:
+            error_type = error_dic['type']
+            message = error_dic['message']
+            return Response({'success': False, 'type': error_dic['type'], 'message': error_dic['message']}, status=status.HTTP_400_BAD_REQUEST)
+
+        user = self.user
+        print user
+        userprofile = user.userprofile
+        couple = CoupleController.get_couple(user)
+
+        if first_name is not None:
+            user.first_name = first_name
+
+        if last_name is not None:
+            user.last_name = last_name
+
+        if gender is not None:
+            userprofile.gender = gender
+
+        if birthdate is not None:
+            userprofile.birthdate = parser.parse(birthdate).date()
+
+        if first_date is not None:
+            couple.first_date = parser.parse(first_date).date()
+
+        if image is not None:
+            userprofile.image = image
+
+        user.save()
+        userprofile.save()
+        couple.save()
+
+        return Response({'success': True}, status=status.HTTP_200_OK)
         result = {}
         return result

@@ -125,7 +125,6 @@ class UserProfileViewSet(viewsets.ModelViewSet):
             return Response({'success': False, 'type': error_dic['type'], 'message': error_dic['message']}, status=status.HTTP_400_BAD_REQUEST)
 
         user = request.user
-        print user
         userprofile = user.userprofile
         couple = CoupleController.get_couple(user)
 
@@ -141,7 +140,7 @@ class UserProfileViewSet(viewsets.ModelViewSet):
         if birthdate is not None:
             userprofile.birthdate = parser.parse(birthdate).date()
 
-        if first_date is not None:
+        if first_date is not None and couple:
             couple.first_date = parser.parse(first_date).date()
 
         if image is not None:
@@ -149,7 +148,8 @@ class UserProfileViewSet(viewsets.ModelViewSet):
 
         user.save()
         userprofile.save()
-        couple.save()
+        if couple:
+            couple.save()
 
         return Response({'success': True}, status=status.HTTP_200_OK)
 

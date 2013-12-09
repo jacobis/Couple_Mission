@@ -27,12 +27,12 @@ urlpatterns = patterns('',
                        )
 
 urlpatterns += patterns('couple_mission.apps.account',
-                        url(r'^login$', 'views.obtain_auth_token'),
-                        url(r'^me$', 'views.me'),
+                        url(r'^api/v1/login$', 'views.obtain_auth_token'),
+                        url(r'^api/v1/me$', 'views.me'),
                         )
 
 urlpatterns += patterns('couple_mission.apps.uai',
-                        url(r'^mission/(?P<mission_id>\w+)$',
+                        url(r'^api/v1/mission/(?P<mission_id>\w+)$',
                             'views.mission_detail_view', name='mission_detail'),
                         )
 
@@ -54,4 +54,8 @@ router.register(r'comments', CommentViewSet)
 router.register(r'photo_albums', PhotoAlbumViewSet)
 router.register(r'photos', PhotoViewSet)
 router.register(r'letters', LetterViewSet)
-urlpatterns += router.urls
+# urlpatterns += router.urls
+
+urlpatterns += patterns('',
+                        url(r'^api/v1/', include(router.urls)),
+                        )
