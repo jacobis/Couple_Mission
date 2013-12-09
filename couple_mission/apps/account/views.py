@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 import re
+import urllib
 from dateutil import parser
 
 # Django
@@ -69,17 +70,17 @@ class UserProfileViewSet(viewsets.ModelViewSet):
 
         error_dic = {}
 
-        if first_name is not None:
-            if not name_reg.match(first_name):
-                error_dic['type'] = 'first_name'
-                error_dic['message'] = _(u'이름의 형식이 잘못 되었습니다.')
-                return error_dic
+        # if first_name is not None:
+        #     if not name_reg.match(first_name):
+        #         error_dic['type'] = 'first_name'
+        #         error_dic['message'] = _(u'이름의 형식이 잘못 되었습니다.')
+        #         return error_dic
 
-        if last_name is not None:
-            if not name_reg.match(last_name):
-                error_dic['type'] = 'last_name'
-                error_dic['message'] = _(u'성의 형식이 잘못 되었습니다.')
-                return error_dic
+        # if last_name is not None:
+        #     if not name_reg.match(last_name):
+        #         error_dic['type'] = 'last_name'
+        #         error_dic['message'] = _(u'성의 형식이 잘못 되었습니다.')
+        #         return error_dic
 
         if gender is not None:
             if gender.upper() not in ['M', 'F']:
@@ -109,7 +110,13 @@ class UserProfileViewSet(viewsets.ModelViewSet):
         # 필드들의 변경은 가능
 
         first_name = request.DATA.get('first_name', None)
+        if first_name is not None:
+            first_name = urllib.unquote(
+                first_name.encode('utf-8')).decode('utf-8')
         last_name = request.DATA.get('last_name', None)
+        if last_name is not None:
+            last_name = urllib.unquote(
+                last_name.encode('utf-8')).decode('utf-8')
         gender = request.DATA.get('gender', None)
         birthdate = request.DATA.get('birthdate', None)
         first_date = request.DATA.get('first_date', None)
@@ -120,6 +127,7 @@ class UserProfileViewSet(viewsets.ModelViewSet):
             first_name, last_name, gender, birthdate, first_date)
 
         if error_dic:
+            print error_dic
             error_type = error_dic['type']
             message = error_dic['message']
             return Response({'success': False, 'type': error_dic['type'], 'message': error_dic['message']}, status=status.HTTP_400_BAD_REQUEST)

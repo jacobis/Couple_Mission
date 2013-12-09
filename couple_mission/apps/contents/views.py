@@ -32,6 +32,23 @@ class PhotoAlbumViewSet(viewsets.ModelViewSet):
     serializer_class = PhotoAlbumSerializer
     permission_classes = (IsAuthenticated,)
 
+    def list(self, request):
+        couple_object = CoupleController.get_couple(request.user)
+        photo_albums = PhotoAlbum.objects.filter(couple=couple_object)
+        serializer = PhotoAlbumSerializer(photo_albums, many=True)
+        return Response({'success': True, 'data': serializer.data}, status=status.HTTP_200_OK)
+
+    def create(self, request):
+        user = request.user
+        couple = CoupleController.get_couple(request.user)
+
+        title = request.DATA.get('title')
+
+        photo_album = PhotoAlbum.objects.create(
+            user=user, couple=couple, title=title)
+
+        return Response({'success': True, 'data': {'photo_album_pk': photo_album.pk}}, status=status.HTTP_200_OK)
+
 
 class PhotoViewSet(viewsets.ModelViewSet):
     queryset = Photo.objects.all()
