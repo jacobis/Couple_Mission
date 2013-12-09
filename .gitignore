@@ -22,3 +22,5 @@ celerybeat-schedule
 
 # Media Folder
 **/media
+
+fabfile.py
