@@ -1,5 +1,7 @@
 from django.contrib import admin
 from django.conf.urls import patterns, include, url
+from django.conf.urls.static import static
+from django.conf import settings
 
 # Django REST Framework
 from rest_framework import routers
@@ -40,6 +42,12 @@ urlpatterns += patterns('couple_mission.apps.uai',
                         url(r'^$',
                             'views.main_index'),
                         )
+
+if settings.DEBUG:
+    urlpatterns += static(
+        settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+    urlpatterns += static(
+        settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 
 router = routers.DefaultRouter(trailing_slash=False)
 router.register(r'users', UserViewSet)

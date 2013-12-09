@@ -30,6 +30,7 @@ class CommentViewSet(viewsets.ModelViewSet):
 class PhotoAlbumViewSet(viewsets.ModelViewSet):
     queryset = PhotoAlbum.objects.all()
     serializer_class = PhotoAlbumSerializer
+    permission_classes = (IsAuthenticated,)
 
 
 class PhotoViewSet(viewsets.ModelViewSet):
