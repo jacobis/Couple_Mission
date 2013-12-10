@@ -13,6 +13,7 @@ from couple_mission.apps.couple_request.views import CoupleRequestViewSet
 from couple_mission.apps.couple.views import CoupleViewSet
 from couple_mission.apps.contents.views import CommentViewSet, PhotoAlbumViewSet, PhotoViewSet, LetterViewSet
 from couple_mission.apps.uai.views import MissionCategoryViewSet, MissionView, BadgeViewSet, TitleViewSet
+from couple_mission.apps.headquarter.views import NoticeViewSet
 
 
 # See:
@@ -62,6 +63,7 @@ router.register(r'comments', CommentViewSet)
 router.register(r'photo_albums', PhotoAlbumViewSet)
 router.register(r'photos', PhotoViewSet)
 router.register(r'letters', LetterViewSet)
+router.register(r'notices', NoticeViewSet)
 # urlpatterns += router.urls
 
 urlpatterns += patterns('',
