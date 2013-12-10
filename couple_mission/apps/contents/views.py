@@ -21,6 +21,9 @@ from couple_mission.apps.contents.models import Comment, PhotoAlbum, Photo, Lett
 from couple_mission.apps.contents.serializers import CommentSerializer, PhotoAlbumSerializer, PhotoSerializer, LetterSerializer
 from couple_mission.apps.couple.controller import CoupleController
 
+# Project Libs
+from couple_mission.libs.common.string import sanitize
+
 
 class CommentViewSet(viewsets.ModelViewSet):
     queryset = Comment.objects.all()
@@ -38,12 +41,19 @@ class PhotoAlbumViewSet(viewsets.ModelViewSet):
         serializer = PhotoAlbumSerializer(photo_albums, many=True)
         return Response({'success': True, 'data': serializer.data}, status=status.HTTP_200_OK)
 
+    def retrieve(self, request, pk):
+        couple_object = CoupleController.get_couple(request.user)
+        album = PhotoAlbum.objects.get(pk=pk)
+        photos = Photo.objects.filter(album=album)
+        serializer = PhotoSerializer(photos, many=True)
+
+        return Response({'success': True, 'data': serializer.data}, status=status.HTTP_200_OK)
+
     def create(self, request):
-        # Todo
-        user = request.user
-        couple = CoupleController.get_couple(user)
+        couple = CoupleController.get_couple(request.user)
 
         title = request.DATA.get('title')
+        title = sanitize(title)
 
         photo_album = PhotoAlbum.objects.create(
             couple=couple, title=title)
@@ -79,6 +89,7 @@ class PhotoViewSet(viewsets.ModelViewSet):
         except:
             return Response({'success': False, 'message': _(u'사진 업로드 실패')}, status=status.HTTP_400_BAD_REQUEST)
         description = request.DATA.get('description')
+        description = sanitize(description)
 
         photo = Photo.objects.create(
             user=user, couple=couple, album=album, image=image, description=description)

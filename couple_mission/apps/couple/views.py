@@ -18,6 +18,9 @@ from couple_mission.apps.couple.serializers import CoupleSerializer
 from couple_mission.apps.uai.views import Mission
 from couple_mission.apps.contents.models import PhotoAlbum
 
+# Project Libs
+from couple_mission.libs.common.string import sanitize
+
 
 class CoupleViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Couple.objects.all()

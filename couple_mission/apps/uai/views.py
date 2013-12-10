@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 import datetime
 
 from django.shortcuts import render
@@ -15,6 +17,9 @@ from rest_framework.decorators import action, link
 from couple_mission.apps.uai.models import MissionCategory, Mission, Badge, Title
 from couple_mission.apps.couple.models import CoupleMission
 from couple_mission.apps.uai.serializers import MissionCategorySerializer, MissionSerializer, BadgeSerializer, TitleSerializer
+
+# Project Libs
+from couple_mission.libs.common.string import sanitize
 
 from couple_mission.apps.uai.mission_handler import MissionHandler
 

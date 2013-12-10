@@ -31,6 +31,9 @@ class PhotoAlbum(TimeStampModel):
     class Meta:
         db_table = "contents_photo_album"
 
+    def __unicode__(self):
+        return "(%s)%s" % (self.pk, self.title)
+
 
 class Photo(Contents):
     album = models.ForeignKey(PhotoAlbum, default="", blank=True, null=True)

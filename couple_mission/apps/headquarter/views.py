@@ -14,6 +14,9 @@ from couple_mission.libs.permissions import IsAdminUserOrReadOnly
 from couple_mission.apps.headquarter.models import Notice
 from couple_mission.apps.headquarter.serializers import NoticeSerializer
 
+# Project Libs
+from couple_mission.libs.common.string import sanitize
+
 
 class NoticeViewSet(viewsets.ModelViewSet):
     queryset = Notice.objects.all()

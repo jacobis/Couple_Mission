@@ -20,6 +20,9 @@ from couple_mission.apps.couple.models import Couple
 from couple_mission.apps.couple_request.models import CoupleRequest
 from couple_mission.apps.couple_request.serializers import CoupleRequestSerializer
 
+# Project Libs
+from couple_mission.libs.common.string import sanitize
+
 # Other
 from phonenumber_field.phonenumber import to_python
 

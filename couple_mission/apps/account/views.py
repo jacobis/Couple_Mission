@@ -25,6 +25,9 @@ from couple_mission.apps.account.models import UserProfile
 from couple_mission.apps.account.serializers import UserSerializer, UserProfileSerializer, AuthTokenSerializer
 from couple_mission.apps.couple.controller import CoupleController
 
+# Project Libs
+from couple_mission.libs.common.string import sanitize
+
 
 class UserViewSet(viewsets.ModelViewSet):
 
@@ -111,12 +114,10 @@ class UserProfileViewSet(viewsets.ModelViewSet):
 
         first_name = request.DATA.get('first_name', None)
         if first_name is not None:
-            first_name = urllib.unquote(
-                first_name.encode('utf-8')).decode('utf-8')
+            first_name = sanitize(first_name)
         last_name = request.DATA.get('last_name', None)
         if last_name is not None:
-            last_name = urllib.unquote(
-                last_name.encode('utf-8')).decode('utf-8')
+            last_name = sanitize(last_name)
         gender = request.DATA.get('gender', None)
         birthdate = request.DATA.get('birthdate', None)
         first_date = request.DATA.get('first_date', None)
@@ -137,10 +138,10 @@ class UserProfileViewSet(viewsets.ModelViewSet):
         couple = CoupleController.get_couple(user)
 
         if first_name is not None:
-            user.first_name = first_name
+            user.first_name = sanitize(first_name)
 
         if last_name is not None:
-            user.last_name = last_name
+            user.last_name = sanitize(last_name)
 
         if gender is not None:
             userprofile.gender = gender
