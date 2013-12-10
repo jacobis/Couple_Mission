@@ -219,6 +219,7 @@ LOCAL_APPS = (
     'apps.points',
     'apps.uai',
     'apps.couple_request',
+    'apps.headquarter',
 )
 
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#installed-apps
