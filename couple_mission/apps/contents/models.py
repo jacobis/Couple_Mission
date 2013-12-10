@@ -9,15 +9,25 @@ from couple_mission.libs.common.model import TimeStampModel
 from couple_mission.libs.utils.storage import getfilesystem
 
 
-class Contents(TimeStampModel):
+class BaseContents(TimeStampModel):
     user = models.ForeignKey(User)
     couple = models.ForeignKey(Couple)
+    comment_manager = models.OneToOneField(CommentManager)
 
     class Meta:
         abstract = True
 
 
-class Comment(Contents):
+class CommentManager(TimeStampModel):
+
+    class Meta:
+        db_table = "comment_manager"
+
+
+class Comment(TimeStampModel):
+    comment_manager = models.ForeignKey(
+        CommentManager, related_name='comments')
+    user = models.ForeignKey(User, related_name='has_comments')
     content = models.CharField("Content", max_length=200)
 
     class Meta:
@@ -35,7 +45,7 @@ class PhotoAlbum(TimeStampModel):
         return "(%s)%s" % (self.pk, self.title)
 
 
-class Photo(Contents):
+class Photo(BaseContents):
     album = models.ForeignKey(PhotoAlbum, default="", blank=True, null=True)
     comment = models.ForeignKey(Comment, default="", blank=True, null=True)
     image = models.ImageField(
@@ -48,7 +58,7 @@ class Photo(Contents):
         ordering = ['-created_at']
 
 
-class Letter(Contents):
+class Letter(BaseContents):
     content = models.TextField("Content")
     reading = models.BooleanField("Reading", default=False)
 
