@@ -6,18 +6,23 @@ from couple_mission.apps.contents.models import Comment, PhotoAlbum, Photo, Lett
 from couple_mission.apps.couple.models import Couple
 
 
+class AdminPhotoAlbum(admin.ModelAdmin):
+    list_display = ('id', 'couple', 'title')
+
+
 class AdminPhoto(admin.ModelAdmin):
     list_display = (
-        'user', 'couple', 'album', 'image', 'description', 'comment')
+        'user', 'couple', 'album', 'image', 'description')
 
 
 class AdminLetter(admin.ModelAdmin):
-    list_display = ('user', 'couple', 'content', 'reading')
+    list_display = ('user', 'couple', 'content', 'already_read')
 
 
 class AdminComment(admin.ModelAdmin):
-    list_display = ('user', 'couple', 'content')
+    list_display = ('user', 'content')
 
+admin.site.register(PhotoAlbum, AdminPhotoAlbum)
 admin.site.register(Photo, AdminPhoto)
 admin.site.register(Letter, AdminLetter)
 admin.site.register(Comment, AdminComment)

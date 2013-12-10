@@ -11,3 +11,10 @@ class CoupleController(object):
             return couple
         else:
             raise Exception('Need token.')
+
+    @classmethod
+    def get_partner(cls, couple, user):
+        if couple.partner_a == user:
+            return couple.partner_b
+        else:
+            return couple.partner_a

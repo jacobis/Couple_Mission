@@ -16,27 +16,11 @@ from rest_framework.decorators import action, link
 from couple_mission.apps.couple.models import Couple, CoupleMission
 from couple_mission.apps.couple.serializers import CoupleSerializer
 from couple_mission.apps.uai.views import Mission
-from couple_mission.apps.contents.models import PhotoAlbum
 
 # Project Libs
 from couple_mission.libs.common.string import sanitize
 
 
-class CoupleViewSet(viewsets.ReadOnlyModelViewSet):
+class CoupleViewSet(viewsets.ModelViewSet):
     queryset = Couple.objects.all()
     serializer_class = CoupleSerializer
-
-    @receiver(post_save, sender=Couple)
-    def initialize_couple(sender, instance=None, created=False, **kwargs):
-        if created:
-            PhotoAlbum.objects.create(couple=instance, title=_(u"기본앨범"))
-
-# class CoupleMissionViewSet(viewsets.ModelViewSet):
-#     queryset = CoupleMission.objects.all()
-#     serializer_class =
-
-
-# class CoupleMisson():
-
-#     def check_mission(self):
-#         Mission.letter_mission()

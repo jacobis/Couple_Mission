@@ -42,7 +42,6 @@ class PhotoAlbumViewSet(viewsets.ModelViewSet):
         return Response({'success': True, 'data': serializer.data}, status=status.HTTP_200_OK)
 
     def retrieve(self, request, pk):
-        couple_object = CoupleController.get_couple(request.user)
         album = PhotoAlbum.objects.get(pk=pk)
         photos = Photo.objects.filter(album=album)
         serializer = PhotoSerializer(photos, many=True)
@@ -80,9 +79,8 @@ class PhotoViewSet(viewsets.ModelViewSet):
             album_pk = request.DATA.get('album')
             album = PhotoAlbum.objects.get(pk=album_pk)
 
-        except Exception as e:
-            print e
-            return Response({'success': False, 'message': _(u'앨범')}, status=status.HTTP_400_BAD_REQUEST)
+        except:
+            album = None
 
         try:
             image = request.FILES.get('image')
@@ -102,15 +100,63 @@ class LetterViewSet(viewsets.ModelViewSet):
     serializer_class = LetterSerializer
     permission_classes = (IsAuthenticated,)
 
+    def list(self, request):
+        couple_object = CoupleController.get_couple(request.user)
+        letters = Letter.objects.filter(couple=couple_object)
+        serializer = LetterSerializer(letters, many=True)
+
+        return Response({'success': True, 'data': serializer.data}, status=status.HTTP_200_OK)
+
+    def retrieve(self, request, pk=None):
+        couple = CoupleController.get_couple(request.user)
+        letter = Letter.objects.get(pk=pk)
+
+        if letter.user != request.user and not letter.already_read:
+            letter.already_read = True
+            letter.save()
+
+        sender = letter.user.get_full_name()
+        receiver = letter.receiver.get_full_name()
+        content = letter.content
+        paper_type = letter.paper_type
+        comments = letter.comment_manager.comments.all()
+        updated_at = letter.updated_at
+        comments_serializer = CommentSerializer(comments, many=True)
+
+        letter_data = {'sender': sender, 'receiver': receiver,
+                       'content': content, 'updated_at': updated_at, 'paper_type': paper_type}
+
+        return Response({'success': True, 'data': {'letter': letter_data, 'comments': comments_serializer.data}}, status=status.HTTP_200_OK)
+
     def create(self, request, *args, **kwargs):
-        serializer = self.get_serializer(data=request.DATA)
         user = request.user
-        couple_id = request.couple_id
-        couple = Couple.objects.get(id=couple_id)
+        couple = CoupleController.get_couple(user)
+        receiver = CoupleController.get_partner(couple, user)
+        content = request.DATA.get('content')
+        content = sanitize(content)
+        paper_type = request.DATA.get('paper_type')
+        if not paper_type:
+            paper_type = Letter.PLAIN
+        else:
+            try:
+                paper_type = int(paper_type)
+            except:
+                message = _(u'편지지 타입이 올바르지 않습니다.')
+                return Response({'success': False, 'message': message}, status=status.HTTP_400_BAD_REQUEST)
 
-        self.pre_save(serializer.object)
-        self.object = serializer.save(force_insert=True)
-        self.post_save(self.object, created=True)
-        headers = self.get_success_headers(serializer.data)
+        letter = Letter.objects.create(
+            user=user, couple=couple, receiver=receiver, content=content, paper_type=paper_type)
 
-        return Response({'success': True}, status=status.HTTP_201_CREATED)
+        return Response({'success': True, 'data': {'letter_pk': letter.pk}}, status=status.HTTP_201_CREATED)
+
+    @action(methods=['POST'])
+    def comment(self, request, pk=None):
+        user = request.user
+        letter = Letter.objects.get(pk=pk)
+        content = request.DATA.get('content')
+        content = sanitize(content)
+
+        comment = Comment.objects.create(
+            comment_manager=letter.comment_manager, user=user, content=content)
+
+        return Response({'success': True, 'data': {'comment_pk': comment.pk}}, status=status.HTTP_201_CREATED)

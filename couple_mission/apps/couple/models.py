@@ -6,6 +6,7 @@ from couple_mission.apps.uai.models import Mission, Badge, Title
 
 # Project Libs
 from couple_mission.libs.common.model import TimeStampModel
+from couple_mission.libs.utils.storage import getfilesystem
 
 
 class Couple(TimeStampModel):
@@ -14,6 +15,8 @@ class Couple(TimeStampModel):
     partner_b = models.ForeignKey(
         User, related_name='partner_b', null=True, blank=True)
     first_date = models.DateField("Date", null=True, blank=True)
+    image = models.ImageField(
+        "Image", upload_to='couple/', storage=getfilesystem(), null=True, blank=True)
 
     class Meta:
         unique_together = ("partner_a", "partner_b")

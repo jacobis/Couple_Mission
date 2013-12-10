@@ -8,14 +8,16 @@ from django.db import models
 class Migration(SchemaMigration):
 
     def forwards(self, orm):
-        # Deleting field 'PhotoAlbum.user'
-        db.delete_column('contents_photo_album', 'user_id')
+        # Adding field 'Letter.paper_type'
+        db.add_column('contents_letter', 'paper_type',
+                      self.gf('django.db.models.fields.IntegerField')(default=1),
+                      keep_default=False)
 
 
     def backwards(self, orm):
+        # Deleting field 'Letter.paper_type'
+        db.delete_column('contents_letter', 'paper_type')
 
-        # User chose to not deal with backwards NULL issues for 'PhotoAlbum.user'
-        raise RuntimeError("Cannot reverse this migration. 'PhotoAlbum.user' and its values cannot be restored.")
 
     models = {
         u'auth.group': {
@@ -48,28 +50,37 @@ class Migration(SchemaMigration):
             'username': ('django.db.models.fields.CharField', [], {'unique': 'True', 'max_length': '30'})
         },
         u'contents.comment': {
-            'Meta': {'object_name': 'Comment'},
+            'Meta': {'ordering': "['created_at']", 'object_name': 'Comment'},
+            'comment_manager': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'comments'", 'to': u"orm['contents.CommentManager']"}),
             'content': ('django.db.models.fields.CharField', [], {'max_length': '200'}),
-            'couple': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['couple.Couple']"}),
             'created_at': ('django.db.models.fields.DateTimeField', [], {'auto_now_add': 'True', 'blank': 'True'}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'updated_at': ('django.db.models.fields.DateTimeField', [], {'auto_now': 'True', 'blank': 'True'}),
-            'user': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['auth.User']"})
+            'user': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'has_comments'", 'to': u"orm['auth.User']"})
+        },
+        u'contents.commentmanager': {
+            'Meta': {'object_name': 'CommentManager', 'db_table': "'comment_manager'"},
+            'created_at': ('django.db.models.fields.DateTimeField', [], {'auto_now_add': 'True', 'blank': 'True'}),
+            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'updated_at': ('django.db.models.fields.DateTimeField', [], {'auto_now': 'True', 'blank': 'True'})
         },
         u'contents.letter': {
             'Meta': {'object_name': 'Letter'},
+            'already_read': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
+            'comment_manager': ('django.db.models.fields.related.OneToOneField', [], {'to': u"orm['contents.CommentManager']", 'unique': 'True'}),
             'content': ('django.db.models.fields.TextField', [], {}),
             'couple': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['couple.Couple']"}),
             'created_at': ('django.db.models.fields.DateTimeField', [], {'auto_now_add': 'True', 'blank': 'True'}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'reading': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
+            'paper_type': ('django.db.models.fields.IntegerField', [], {'default': '1'}),
+            'receiver': ('django.db.models.fields.related.ForeignKey', [], {'blank': 'True', 'related_name': "'recieved'", 'null': 'True', 'to': u"orm['auth.User']"}),
             'updated_at': ('django.db.models.fields.DateTimeField', [], {'auto_now': 'True', 'blank': 'True'}),
             'user': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['auth.User']"})
         },
         u'contents.photo': {
             'Meta': {'ordering': "['-created_at']", 'object_name': 'Photo'},
             'album': ('django.db.models.fields.related.ForeignKey', [], {'default': "''", 'to': u"orm['contents.PhotoAlbum']", 'null': 'True', 'blank': 'True'}),
-            'comment': ('django.db.models.fields.related.ForeignKey', [], {'default': "''", 'to': u"orm['contents.Comment']", 'null': 'True', 'blank': 'True'}),
+            'comment_manager': ('django.db.models.fields.related.OneToOneField', [], {'to': u"orm['contents.CommentManager']", 'unique': 'True'}),
             'couple': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['couple.Couple']"}),
             'created_at': ('django.db.models.fields.DateTimeField', [], {'auto_now_add': 'True', 'blank': 'True'}),
             'description': ('django.db.models.fields.TextField', [], {'default': "''", 'null': 'True', 'blank': 'True'}),
@@ -80,7 +91,7 @@ class Migration(SchemaMigration):
         },
         u'contents.photoalbum': {
             'Meta': {'object_name': 'PhotoAlbum', 'db_table': "'contents_photo_album'"},
-            'couple': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['couple.Couple']"}),
+            'couple': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'photo_albums'", 'to': u"orm['couple.Couple']"}),
             'created_at': ('django.db.models.fields.DateTimeField', [], {'auto_now_add': 'True', 'blank': 'True'}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'title': ('django.db.models.fields.CharField', [], {'max_length': '100'}),
@@ -96,6 +107,7 @@ class Migration(SchemaMigration):
         u'couple.couple': {
             'Meta': {'unique_together': "(('partner_a', 'partner_b'),)", 'object_name': 'Couple', 'db_table': "'couple'"},
             'created_at': ('django.db.models.fields.DateTimeField', [], {'auto_now_add': 'True', 'blank': 'True'}),
+            'first_date': ('django.db.models.fields.DateField', [], {'null': 'True', 'blank': 'True'}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'partner_a': ('django.db.models.fields.related.ForeignKey', [], {'blank': 'True', 'related_name': "'partner_a'", 'null': 'True', 'to': u"orm['auth.User']"}),
             'partner_b': ('django.db.models.fields.related.ForeignKey', [], {'blank': 'True', 'related_name': "'partner_b'", 'null': 'True', 'to': u"orm['auth.User']"}),

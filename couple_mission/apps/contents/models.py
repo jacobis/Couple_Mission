@@ -9,6 +9,12 @@ from couple_mission.libs.common.model import TimeStampModel
 from couple_mission.libs.utils.storage import getfilesystem
 
 
+class CommentManager(TimeStampModel):
+
+    class Meta:
+        db_table = "comment_manager"
+
+
 class BaseContents(TimeStampModel):
     user = models.ForeignKey(User)
     couple = models.ForeignKey(Couple)
@@ -17,11 +23,13 @@ class BaseContents(TimeStampModel):
     class Meta:
         abstract = True
 
+    def save(self, *args, **kwargs):
 
-class CommentManager(TimeStampModel):
+        if not self.pk:
+            comment_manager = CommentManager.objects.create()
+            self.comment_manager = comment_manager
 
-    class Meta:
-        db_table = "comment_manager"
+        super(BaseContents, self).save(*args, **kwargs)
 
 
 class Comment(TimeStampModel):
@@ -32,6 +40,7 @@ class Comment(TimeStampModel):
 
     class Meta:
         db_table = "contents_comment"
+        ordering = ['created_at']
 
 
 class PhotoAlbum(TimeStampModel):
@@ -47,7 +56,6 @@ class PhotoAlbum(TimeStampModel):
 
 class Photo(BaseContents):
     album = models.ForeignKey(PhotoAlbum, default="", blank=True, null=True)
-    comment = models.ForeignKey(Comment, default="", blank=True, null=True)
     image = models.ImageField(
         "Image", upload_to='photo/', storage=getfilesystem())
     description = models.TextField(
@@ -59,8 +67,16 @@ class Photo(BaseContents):
 
 
 class Letter(BaseContents):
+    # Paper Type
+    PLAIN = 0
+    PAPER_TYPE_CHOICE = ((PLAIN, "Plain"),)
+
+    receiver = models.ForeignKey(
+        User, related_name='recieved', blank=True, null=True)
     content = models.TextField("Content")
-    reading = models.BooleanField("Reading", default=False)
+    already_read = models.BooleanField("Already read", default=False)
+    paper_type = models.IntegerField(
+        "Paper type", choices=PAPER_TYPE_CHOICE, default=PLAIN)
 
     class Meta:
         db_table = "contents_letter"
