@@ -46,7 +46,7 @@ class PhotoAlbumViewSet(viewsets.ModelViewSet):
         title = request.DATA.get('title')
 
         photo_album = PhotoAlbum.objects.create(
-            user=user, couple=couple, title=title)
+            couple=couple, title=title)
 
         return Response({'success': True, 'data': {'photo_album_pk': photo_album.pk}}, status=status.HTTP_200_OK)
 
