@@ -15,9 +15,6 @@ class IsOwnerOrCoupleOnly(permissions.BasePermission):
         is_owner = bool(obj.user == request.user)
         is_couple = bool(CoupleController.get_couple(request.user))
 
-        print is_owner
-        print is_couple
-
         return is_owner or is_couple
 
 
@@ -28,8 +25,7 @@ class IsAdminUserOrReadOnly(permissions.BasePermission):
     """
 
     def has_permission(self, request, view):
-        print request.user
-        print request.user.is_staff
+
         if request.method in SAFE_METHODS:
             return True
         if request.user and request.user.is_staff:

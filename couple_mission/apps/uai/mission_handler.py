@@ -53,7 +53,6 @@ class MissionHandler():
             mission=mission, couple=self.couple)
         started_datetime = couple_mission.started_datetime
 
-        print Photo.objects.filter(created_at__gte=started_datetime)
         if Photo.objects.filter(created_at__gte=started_datetime).exists():
             couple_mission.status = 2
             couple_mission.finished_time = datetime.utcnow()
