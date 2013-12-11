@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-
+from datetime import datetime
 from dateutil import parser
 
 from django.utils.translation import ugettext as _
@@ -19,7 +19,7 @@ from couple_mission.apps.couple.models import Couple, CoupleMission
 from couple_mission.apps.couple.serializers import CoupleSerializer, CoupleMissionSerializer
 from couple_mission.apps.uai.models import Mission, MissionCategory
 from couple_mission.apps.couple.controller import CoupleController
-from couple_mission.apps.uai.mission_handler import MissionHandler
+from couple_mission.apps.uai.mission_handler import OneTimeMissionHandler
 
 # Project Libs
 from couple_mission.libs.common.string import sanitize
@@ -99,8 +99,17 @@ class CoupleMissionViewSet(viewsets.ReadOnlyModelViewSet):
         return Response({'success': True, 'data': {'couple_mission': mission_json}}, status=status.HTTP_200_OK)
 
     @action(methods=['POST'])
+    def start_mission(self, request, pk=None):
+        couple_mission = CoupleMission.objects.get(pk=pk)
+        couple_mission.status = CoupleMission.DOING
+        couple_mission.started_datetime = datetime.utcnow()
+        couple_mission.save()
+
+        return Response({'success': True}, status=status.HTTP_200_OK)
+
+    @action(methods=['POST'])
     def do_mission(self, request, pk=None):
-        mission_handler = MissionHandler(request, mission_id=pk)
+        mission_handler = OneTimeMissionHandler(request, mission_id=pk)
         if not mission_handler.has_cleared():
             mission_result = mission_handler.do_mission()
 

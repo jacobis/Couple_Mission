@@ -20,6 +20,7 @@ from couple_mission.apps.couple.models import Couple
 from couple_mission.apps.contents.models import Comment, PhotoAlbum, Photo, Letter
 from couple_mission.apps.contents.serializers import CommentSerializer, PhotoAlbumSerializer, PhotoSerializer, LetterSerializer
 from couple_mission.apps.couple.controller import CoupleController
+from couple_mission.apps.uai.mission_handler import MissionHandler
 
 # Project Libs
 from couple_mission.libs.common.string import sanitize
@@ -91,6 +92,9 @@ class PhotoViewSet(viewsets.ModelViewSet):
 
         photo = Photo.objects.create(
             user=user, couple=couple, album=album, image=image, description=description)
+
+        mission_handler = MissionHandler(user)
+        mission_handler.new_cleared_missions()
 
         return Response({'success': True, 'data': {'photo_pk': photo.pk}}, status=status.HTTP_200_OK)
 

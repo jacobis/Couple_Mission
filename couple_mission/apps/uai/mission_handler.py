@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-
+from datetime import datetime
 from dateutil import parser
 
 from django.contrib.auth.models import User
@@ -8,9 +8,80 @@ from django.utils.translation import ugettext as _
 from couple_mission.apps.uai.models import Mission
 from couple_mission.apps.couple.models import CoupleMission
 from couple_mission.apps.couple.controller import CoupleController
+from couple_mission.apps.contents.models import Photo, Letter
 
 
 class MissionHandler():
+
+    def __init__(self, user):
+        if not isinstance(user, User):
+            raise Exception('must pass User object.')
+
+        self.user = user
+        self.couple = CoupleController.get_couple(user)
+
+    def new_cleared_missions(self):
+        mission_pks = self.get_uncleared_missions()
+        new_cleared_missions = []
+        for mission_pk in mission_pks:
+            couple_mission = self.do_mission(mission_pk)
+            if couple_mission.status == CoupleMission.DONE:
+                new_cleared_missions.append(couple_mission)
+
+        return new_cleared_missions
+
+    def get_uncleared_missions(self):
+        couple_missions = CoupleMission.objects.filter(
+            couple=self.couple).exclude(status=CoupleMission.DONE).exclude(status=CoupleMission.AVAILABLE)
+        un_cleared_mission_pks = []
+        for couple_mission in couple_missions:
+            un_cleared_mission_pks.append(couple_mission.mission.pk)
+
+        return un_cleared_mission_pks
+
+    def do_mission(self, pk):
+        method_name = 'do_mission_%s' % str(pk)
+        method_to_call = getattr(MissionHandler, method_name)
+        return method_to_call.__call__(self, pk)
+
+    def do_mission_1(self, pk):
+        """
+        사진 1개 업로드 하기 미션
+        """
+        mission = Mission.objects.get(pk=pk)
+        couple_mission = CoupleMission.objects.get(
+            mission=mission, couple=self.couple)
+        started_datetime = couple_mission.started_datetime
+
+        print Photo.objects.filter(created_at__gte=started_datetime)
+        if Photo.objects.filter(created_at__gte=started_datetime).exists():
+            couple_mission.status = 2
+            couple_mission.finished_time = datetime.utcnow()
+            couple_mission.save()
+
+        return couple_mission
+        mission = Mission.objects.get(pk=pk)
+        couple_mission = CoupleMission.objects.get(
+            mission=mission, couple=self.couple)
+        return couple_mission
+
+    def do_mission_2(self, pk):
+        """
+        편지 1개 업로드 하기 미션
+        """
+        mission = Mission.objects.get(pk=pk)
+        couple_mission = CoupleMission.objects.get(
+            mission=mission, couple=self.couple)
+        started_datetime = couple_mission.started_datetime
+        if Letter.objects.filter(created_at__gte=started_datetime).exists():
+            couple_mission.status = 2
+            couple_mission.finished_time = datetime.utcnow()
+            couple_mission.save()  # couple_mission.save()
+
+        return couple_mission
+
+
+class OneTimeMissionHandler():
 
     def __init__(self, request_obj, mission_id):
         if not isinstance(request_obj.user, User):
@@ -29,7 +100,7 @@ class MissionHandler():
 
     def do_mission(self):
         method_name = 'do_mission_%s' % str(self.mission.pk)
-        method_to_call = getattr(MissionHandler, method_name)
+        method_to_call = getattr(OneTimeMissionHandler, method_name)
         return method_to_call.__call__(self)
 
     def __validate_mission_1__(self, gender, birthdate, first_date):

@@ -22,8 +22,6 @@ from couple_mission.apps.uai.serializers import MissionCategorySerializer, Badge
 # Project Libs
 from couple_mission.libs.common.string import sanitize
 
-from couple_mission.apps.uai.mission_handler import MissionHandler
-
 
 class BadgeViewSet(viewsets.ModelViewSet):
     queryset = Badge.objects.all()

@@ -42,6 +42,8 @@ class CoupleMission(TimeStampModel):
     mission = models.ForeignKey(Mission)
     status = models.IntegerField(
         "Status", choices=COUPLE_MISSION_STATUS_CHOICE, default=AVAILABLE)
+    started_datetime = models.DateTimeField(blank=True, null=True)
+    claered_datetime = models.DateTimeField(blank=True, null=True)
 
     class Meta:
         db_table = "couple_mission"
