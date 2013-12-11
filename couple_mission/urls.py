@@ -10,9 +10,9 @@ from rest_framework.authtoken.views import obtain_auth_token
 # Projects
 from couple_mission.apps.account.views import UserViewSet, UserProfileViewSet
 from couple_mission.apps.couple_request.views import CoupleRequestViewSet
-from couple_mission.apps.couple.views import CoupleViewSet
+from couple_mission.apps.couple.views import CoupleViewSet, CoupleMissionViewSet
 from couple_mission.apps.contents.views import CommentViewSet, PhotoAlbumViewSet, PhotoViewSet, LetterViewSet
-from couple_mission.apps.uai.views import MissionCategoryViewSet, MissionView, BadgeViewSet, TitleViewSet
+from couple_mission.apps.uai.views import BadgeViewSet, TitleViewSet
 from couple_mission.apps.headquarter.views import NoticeViewSet
 
 
@@ -35,11 +35,6 @@ urlpatterns += patterns('couple_mission.apps.account',
                         )
 
 urlpatterns += patterns('couple_mission.apps.uai',
-                        url(r'^api/v1/mission/(?P<mission_id>\w+)$',
-                            'views.mission_detail_view', name='mission_detail'),
-                        )
-
-urlpatterns += patterns('couple_mission.apps.uai',
                         url(r'^$',
                             'views.main_index'),
                         )
@@ -55,8 +50,7 @@ router.register(r'users', UserViewSet)
 router.register(r'user_profiles', UserProfileViewSet)
 router.register(r'couple_requests', CoupleRequestViewSet)
 router.register(r'couples', CoupleViewSet)
-router.register(r'mission_categories', MissionCategoryViewSet)
-# router.register(r'missions', MissionView)
+router.register(r'couple_missions', CoupleMissionViewSet)
 router.register(r'badges', BadgeViewSet)
 router.register(r'titles', TitleViewSet)
 router.register(r'comments', CommentViewSet)

@@ -1,8 +1,12 @@
 # -*- coding: utf-8 -*-
 
+from dateutil import parser
+
 from django.contrib.auth.models import User
+from django.utils.translation import ugettext as _
 
 from couple_mission.apps.uai.models import Mission
+from couple_mission.apps.couple.models import CoupleMission
 from couple_mission.apps.couple.controller import CoupleController
 
 
@@ -16,9 +20,9 @@ class MissionHandler():
         self.user = self.request_obj.user
         self.couple = CoupleController.get_couple(self.user)
 
-        mission = Mission.objects.get(id=mission_id)
-        self.couple_mission = CoupleMission.get_or_create(
-            couple=self.couple, mission=mission)
+        self.mission = Mission.objects.get(id=mission_id)
+        self.couple_mission, created = CoupleMission.objects.get_or_create(
+            couple=self.couple, mission=self.mission)
 
     def has_cleared(self):
         return self.couple_mission.status
@@ -55,49 +59,38 @@ class MissionHandler():
     def do_mission_1(self):
 
         try:
-            first_name = self.DATA['first_name']
-            last_name = self.DATA['last_name']
-            gender = self.DATA['gender']
-            birthdate = self.DATA['birthdate']
-            first_date = self.DATA['first_date']
+            first_name = self.request_obj.DATA['first_name']
+            last_name = self.request_obj.DATA['last_name']
+            gender = self.request_obj.DATA['gender']
+            birthdate = self.request_obj.DATA['birthdate']
+            first_date = self.request_obj.DATA['first_date']
 
-            image = self.FILES['image']
+            image = self.request_obj.FILES['image']
         except:
-            return Response({'success': False}, status=status.HTTP_200_OK)
+            return False
 
         error_dic = self.__validate_mission_1__(
             gender, birthdate, first_date)
 
         if error_dic:
-            return Response({'success': False}, status=status.HTTP_200_OK)
+            return False
 
         user = self.user
-        print user
         userprofile = user.userprofile
-        couple = CoupleController.get_couple(user)
+        couple = self.couple
 
-        if first_name is not None:
-            user.first_name = first_name
-
-        if last_name is not None:
-            user.last_name = last_name
-
-        if gender is not None:
-            userprofile.gender = gender
-
-        if birthdate is not None:
-            userprofile.birthdate = parser.parse(birthdate).date()
-
-        if first_date is not None:
-            couple.first_date = parser.parse(first_date).date()
-
-        if image is not None:
-            userprofile.image = image
+        user.first_name = first_name
+        user.last_name = last_name
+        userprofile.gender = gender
+        userprofile.birthdate = parser.parse(birthdate).date()
+        couple.first_date = parser.parse(first_date).date()
+        userprofile.image = image
 
         user.save()
         userprofile.save()
         couple.save()
 
-        return Response({'success': True}, status=status.HTTP_200_OK)
-        result = {}
-        return result
+        self.couple_mission.status = True
+        self.couple_mission.save()
+
+        return True

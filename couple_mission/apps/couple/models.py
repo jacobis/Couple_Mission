@@ -32,12 +32,20 @@ class Couple(TimeStampModel):
 
 
 class CoupleMission(TimeStampModel):
+    # Couple Mission Status
+    AVAILABLE = 0
+    DOING = 1
+    DONE = 2
+    COUPLE_MISSION_STATUS_CHOICE = ((AVAILABLE, 0), (DOING, 1), (DONE, 2),)
+
     couple = models.ForeignKey(Couple)
     mission = models.ForeignKey(Mission)
-    status = models.BooleanField("Status", default=False)
+    status = models.IntegerField(
+        "Status", choices=COUPLE_MISSION_STATUS_CHOICE, default=AVAILABLE)
 
     class Meta:
         db_table = "couple_mission"
+        ordering = ['-updated_at']
 
 
 class CoupleBadge(TimeStampModel):
