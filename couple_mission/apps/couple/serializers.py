@@ -5,8 +5,8 @@ from rest_framework import serializers
 
 
 class CoupleSerializer(serializers.ModelSerializer):
+    image = serializers.CharField(source='image_url')
 
     class Meta:
         model = Couple
-
-# class CoupleMissionSerializer(serializers.ModelSerializer):
+        fields = ('partner_a', 'partner_b', 'first_date', 'image')

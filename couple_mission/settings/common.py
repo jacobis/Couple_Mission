@@ -61,7 +61,7 @@ DATABASES = {
 
 # GENERAL CONFIGURATION
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#time-zone
-TIME_ZONE = 'America/Los_Angeles'
+TIME_ZONE = 'Asia/Seoul'
 
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#language-code
 LANGUAGE_CODE = 'en-us'
@@ -79,6 +79,13 @@ USE_L10N = True
 USE_TZ = True
 # END GENERAL CONFIGURATION
 
+# GEO CONFIGURATION
+GEOIP_PATH = normpath(join(DJANGO_ROOT, 'libs/data/geo'))
+
+GEOIP_COUNTRY = '/GeoIP.dat'
+
+GEOIP_CITY = '/GeoLiteCity.dat'
+# END GEO CONFIGURATION
 
 # MEDIA CONFIGURATION
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#media-root
@@ -166,6 +173,8 @@ MIDDLEWARE_CLASSES = (
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
+
+    'couple_mission.middleware.TimezoneMiddleware',
 )
 # END MIDDLEWARE CONFIGURATION
 

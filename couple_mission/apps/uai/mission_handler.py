@@ -28,57 +28,48 @@ class MissionHandler():
         method_to_call = getattr(MissionHandler, method_name)
         return method_to_call.__call__(self)
 
-    # def __validate__(self, first_name, last_name, gender, birthdate, first_date):
-    #     name_reg = re.compile(r"^[a-zA-Z0-9]{0,30}$")
-    #     error_dic = {}
-    #     if first_name is not None:
-    #         if not name_reg.match(first_name):
-    #             error_dic['type'] = 'first_name'
-    #             error_dic['message'] = _(u'이름의 형식이 잘못 되었습니다.')
-    #             return error_dic
-    #     if last_name is not None:
-    #         if not name_reg.match(last_name):
-    #             error_dic['type'] = 'last_name'
-    #             error_dic['message'] = _(u'성의 형식이 잘못 되었습니다.')
-    #             return error_dic
-    #     if gender is not None:
-    #         if gender.upper() not in ['M', 'F']:
-    #             error_dic['type'] = 'gender'
-    #             error_dic['message'] = _(u'성별의 형식이 잘못 되었습니다.')
-    #             return error_dic
-    #     if birthdate is not None:
-    #         try:
-    #             parser.parse(birthdate)
-    #         except:
-    #             error_dic['type'] = 'birthdate'
-    #             error_dic['message'] = _(u'생년월일의 형식이 잘못 되었습니다.')
-    #             return error_dic
-    #     if first_date is not None:
-    #         try:
-    #             parser.parse(first_date)
-    #         except:
-    #             error_dic['type'] = 'first_date'
-    #             error_dic['message'] = _(u'사귄날의 형식이 잘못 되었습니다.')
-    #             return error_dic
-    #     return None
+    def __validate_mission_1__(self, gender, birthdate, first_date):
+
+        error_dic = {}
+
+        if gender.upper() not in ['M', 'F']:
+            error_dic['type'] = 'gender'
+            error_dic['message'] = _(u'성별의 형식이 잘못 되었습니다.')
+            return error_dic
+
+        try:
+            parser.parse(birthdate)
+        except:
+            error_dic['type'] = 'birthdate'
+            error_dic['message'] = _(u'생년월일의 형식이 잘못 되었습니다.')
+            return error_dic
+
+        try:
+            parser.parse(first_date)
+        except:
+            error_dic['type'] = 'first_date'
+            error_dic['message'] = _(u'사귄날의 형식이 잘못 되었습니다.')
+            return error_dic
+        return None
 
     def do_mission_1(self):
 
-        first_name = self.DATA.get('first_name', None)
-        last_name = self.DATA.get('last_name', None)
-        gender = self.DATA.get('gender', None)
-        birthdate = self.DATA.get('birthdate', None)
-        first_date = self.DATA.get('first_date', None)
+        try:
+            first_name = self.DATA['first_name']
+            last_name = self.DATA['last_name']
+            gender = self.DATA['gender']
+            birthdate = self.DATA['birthdate']
+            first_date = self.DATA['first_date']
 
-        image = self.FILES.get('image', None)
+            image = self.FILES['image']
+        except:
+            return Response({'success': False}, status=status.HTTP_200_OK)
 
-        error_dic = self.__validate__(
-            first_name, last_name, gender, birthdate, first_date)
+        error_dic = self.__validate_mission_1__(
+            gender, birthdate, first_date)
 
         if error_dic:
-            error_type = error_dic['type']
-            message = error_dic['message']
-            return Response({'success': False, 'type': error_dic['type'], 'message': error_dic['message']}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({'success': False}, status=status.HTTP_200_OK)
 
         user = self.user
         print user

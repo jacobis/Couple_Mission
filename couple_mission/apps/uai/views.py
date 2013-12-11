@@ -29,16 +29,9 @@ class MissionCategoryViewSet(viewsets.ModelViewSet):
     serializer_class = MissionCategorySerializer
 
 
-class MissionView(APIView):
+class MissionView(viewsets.ReadOnlyModelViewSet):
     models = Mission
     # permission_classes = (IsAuthenticated,)
-
-    def get(self, request, format=None):
-        print format
-        return Response('12')
-
-    # def post(self, request):
-    #     return Response('12')
 
 
 class BadgeViewSet(viewsets.ModelViewSet):

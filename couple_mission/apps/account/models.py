@@ -22,5 +22,9 @@ class UserProfile(TimeStampModel):
     class Meta:
         db_table = "account_user_profile"
 
+    @property
+    def image_url(self):
+        return self.image.url if self.image else ''
+
     def __unicode__(self):
         return self.user.username

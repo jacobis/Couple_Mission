@@ -12,6 +12,7 @@ from couple_mission.apps.account.models import UserProfile
 
 
 class UserProfileSerializer(serializers.ModelSerializer):
+    image = serializers.CharField(source='image_url')
 
     class Meta:
         model = UserProfile

@@ -68,22 +68,9 @@ class UserProfileViewSet(viewsets.ModelViewSet):
     serializer_class = UserProfileSerializer
     permission_classes = (IsAuthenticated,)
 
-    def __validate__(self, first_name, last_name, gender, birthdate, first_date):
-        name_reg = re.compile(r"^[a-zA-Z0-9]{0,30}$")
+    def __validate__(self, gender, birthdate, first_date):
 
         error_dic = {}
-
-        # if first_name is not None:
-        #     if not name_reg.match(first_name):
-        #         error_dic['type'] = 'first_name'
-        #         error_dic['message'] = _(u'이름의 형식이 잘못 되었습니다.')
-        #         return error_dic
-
-        # if last_name is not None:
-        #     if not name_reg.match(last_name):
-        #         error_dic['type'] = 'last_name'
-        #         error_dic['message'] = _(u'성의 형식이 잘못 되었습니다.')
-        #         return error_dic
 
         if gender is not None:
             if gender.upper() not in ['M', 'F']:
@@ -125,7 +112,7 @@ class UserProfileViewSet(viewsets.ModelViewSet):
         image = request.FILES.get('image', None)
 
         error_dic = self.__validate__(
-            first_name, last_name, gender, birthdate, first_date)
+            gender, birthdate, first_date)
 
         if error_dic:
             print error_dic
@@ -188,7 +175,7 @@ class Me(APIView):
         couple_id = couple.pk if couple else 0
         user_id = request.user.pk
 
-        return Response({'couple_id': couple_id, 'user_id': user_id})
+        return Response({'success': True, 'couple_id': couple_id, 'user_id': user_id}, status=status.HTTP_200_OK)
 
 
 obtain_auth_token = ObtainAuthToken.as_view()

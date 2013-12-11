@@ -65,6 +65,10 @@ class Photo(BaseContents):
         db_table = "contents_photo"
         ordering = ['-created_at']
 
+    @property
+    def image_url(self):
+        return self.image.url if self.image else ''
+
 
 class Letter(BaseContents):
     # Paper Type
@@ -80,3 +84,7 @@ class Letter(BaseContents):
 
     class Meta:
         db_table = "contents_letter"
+
+    @property
+    def gender(self):
+        return self.user.userprofile.gender

@@ -26,6 +26,10 @@ class Couple(TimeStampModel):
         member = "%s, %s" % (self.partner_a.username, self.partner_b.username)
         return member
 
+    @property
+    def image_url(self):
+        return self.image.url if self.image else ''
+
 
 class CoupleMission(TimeStampModel):
     couple = models.ForeignKey(Couple)
