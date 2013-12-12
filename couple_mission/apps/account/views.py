@@ -15,6 +15,7 @@ from rest_framework import status, parsers, renderers, viewsets
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.parsers import JSONParser, FileUploadParser
+from rest_framework.decorators import action
 
 # REST Framework Authentication & Permissions
 from rest_framework.authtoken.models import Token
@@ -149,6 +150,14 @@ class UserProfileViewSet(viewsets.ModelViewSet):
 
         return Response({'success': True}, status=status.HTTP_200_OK)
 
+    @action(methods=['PUT'])
+    def starter(self, request, pk=None):
+        userprofile = request.user.userprofile
+        userprofile.starter = True
+        userprofile.save()
+
+        return Response({'success': True}, status=status.HTTP_200_OK)
+
 
 class ObtainAuthToken(APIView):
     throttle_classes = ()
@@ -174,8 +183,9 @@ class Me(APIView):
         couple = CoupleController.get_couple(request.user)
         couple_id = couple.pk if couple else 0
         user_id = request.user.pk
+        starter = request.user.userprofile.starter
 
-        return Response({'success': True, 'couple_id': couple_id, 'user_id': user_id}, status=status.HTTP_200_OK)
+        return Response({'success': True, 'couple_id': couple_id, 'user_id': user_id, 'starter': starter}, status=status.HTTP_200_OK)
 
 
 obtain_auth_token = ObtainAuthToken.as_view()

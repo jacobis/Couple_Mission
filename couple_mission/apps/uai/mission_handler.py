@@ -22,20 +22,26 @@ class MissionHandler():
 
     def new_cleared_missions(self):
         mission_pks = self.get_uncleared_missions()
+        if mission_pks is None:
+            return None
         new_cleared_missions = []
         for mission_pk in mission_pks:
             couple_mission = self.do_mission(mission_pk)
-            if couple_mission.status == CoupleMission.DONE:
+            if couple_mission.status == CoupleMission.REWARDABLE:
                 new_cleared_missions.append(couple_mission)
 
         return new_cleared_missions
 
     def get_uncleared_missions(self):
         couple_missions = CoupleMission.objects.filter(
-            couple=self.couple).exclude(status=CoupleMission.DONE).exclude(status=CoupleMission.AVAILABLE)
-        un_cleared_mission_pks = []
-        for couple_mission in couple_missions:
-            un_cleared_mission_pks.append(couple_mission.mission.pk)
+            couple=self.couple).exclude(status=CoupleMission.REWARDABLE).exclude(status=CoupleMission.DONE).exclude(status=CoupleMission.AVAILABLE)
+
+        if not couple_missions.exists():
+            un_cleared_mission_pks = []
+            for couple_mission in couple_missions:
+                un_cleared_mission_pks.append(couple_mission.mission.pk)
+        else:
+            return None
 
         return un_cleared_mission_pks
 
@@ -126,7 +132,10 @@ class OneTimeMissionHandler():
             return error_dic
         return None
 
-    def do_mission_1(self):
+    def do_mission_3(self):
+        """
+        튜토리얼 미션
+        """
 
         try:
             first_name = self.request_obj.DATA['first_name']
@@ -160,7 +169,7 @@ class OneTimeMissionHandler():
         userprofile.save()
         couple.save()
 
-        self.couple_mission.status = True
+        self.couple_mission.status = CoupleMission.REWARDABLE
         self.couple_mission.save()
 
         return True

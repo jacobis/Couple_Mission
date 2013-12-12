@@ -29,6 +29,31 @@ from couple_mission.libs.utils.datetime import normalize
 class CoupleViewSet(viewsets.ModelViewSet):
     queryset = Couple.objects.all()
     serializer_class = CoupleSerializer
+    permission_classes = (IsAuthenticated,)
+
+    def retrieve(self, reqeust, pk=None):
+        couple = Couple.objects.get(pk=pk)
+        partner_a_json = {}
+        partner_b_json = {}
+        partner_a = couple.partner_a
+        partner_b = couple.partner_b
+        partner_a_name = partner_a.last_name + partner_a.first_name
+        partner_a_image = partner_a.userprofile.image
+        partner_a_birthdate = partner_a.userprofile.birthdate
+        partner_b_name = partner_b.last_name + partner_b.last_name
+        partner_b_image = partner_b.userprofile.image
+        partner_b_birthdate = partner_b.userprofile.birthdate
+        partner_a_json['name'] = partner_a_name
+        partner_a_json[
+            'image'] = partner_a_image.url if partner_a_image else ''
+        partner_a_json['birthdate'] = partner_a_birthdate
+        partner_b_json['name'] = partner_b_name
+        partner_b_json['image'] = partner_b_image if partner_b_image else ''
+        partner_b_json['birthdate'] = partner_b_birthdate
+        first_date = couple.first_date
+
+        return Response({'success': True,
+                        'data': {'partner_a': partner_a_json, 'partner_b': partner_b_json, 'first_date': first_date}}, status=status.HTTP_200_OK)
 
     def update(self, request, pk=None):
         couple = Couple.objects.get(pk=pk)
@@ -110,7 +135,7 @@ class CoupleMissionViewSet(viewsets.ReadOnlyModelViewSet):
     @action(methods=['POST'])
     def do_mission(self, request, pk=None):
         mission_handler = OneTimeMissionHandler(request, mission_id=pk)
-        if not mission_handler.has_cleared():
+        if not mission_handler.has_cleared() == CoupleMission.REWARDABLE:
             mission_result = mission_handler.do_mission()
 
             return Response({'success': mission_result}, status=status.HTTP_200_OK)

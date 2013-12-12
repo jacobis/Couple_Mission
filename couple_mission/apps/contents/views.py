@@ -79,7 +79,6 @@ class PhotoViewSet(viewsets.ModelViewSet):
         try:
             album_pk = request.DATA.get('album')
             album = PhotoAlbum.objects.get(pk=album_pk)
-
         except:
             album = None
 
@@ -87,8 +86,12 @@ class PhotoViewSet(viewsets.ModelViewSet):
             image = request.FILES.get('image')
         except:
             return Response({'success': False, 'message': _(u'사진 업로드 실패')}, status=status.HTTP_400_BAD_REQUEST)
-        description = request.DATA.get('description')
-        description = sanitize(description)
+
+        try:
+            description = request.DATA.get('description')
+            description = sanitize(description)
+        except:
+            description = None
 
         photo = Photo.objects.create(
             user=user, couple=couple, album=album, image=image, description=description)
@@ -150,6 +153,9 @@ class LetterViewSet(viewsets.ModelViewSet):
 
         letter = Letter.objects.create(
             user=user, couple=couple, receiver=receiver, content=content, paper_type=paper_type)
+
+        mission_handler = MissionHandler(user)
+        mission_handler.new_cleared_missions()
 
         return Response({'success': True, 'data': {'letter_pk': letter.pk}}, status=status.HTTP_201_CREATED)
 

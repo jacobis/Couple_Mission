@@ -18,6 +18,7 @@ class UserProfile(TimeStampModel):
     gender = models.CharField("Gender", max_length=1, null=True, blank=True)
     image = models.ImageField(
         "Image", upload_to='user_profile/', storage=getfilesystem(), null=True, blank=True)
+    starter = models.BooleanField("Starter", default=False)
 
     class Meta:
         db_table = "account_user_profile"

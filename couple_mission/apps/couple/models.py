@@ -35,8 +35,11 @@ class CoupleMission(TimeStampModel):
     # Couple Mission Status
     AVAILABLE = 0
     DOING = 1
-    DONE = 2
-    COUPLE_MISSION_STATUS_CHOICE = ((AVAILABLE, 0), (DOING, 1), (DONE, 2),)
+    REWARDABLE = 2
+    DONE = 3
+
+    COUPLE_MISSION_STATUS_CHOICE = (
+        (AVAILABLE, 0), (DOING, 1), (REWARDABLE, 2), (DONE, 3))
 
     couple = models.ForeignKey(Couple)
     mission = models.ForeignKey(Mission)
