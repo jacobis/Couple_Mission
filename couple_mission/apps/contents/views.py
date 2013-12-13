@@ -60,6 +60,12 @@ class PhotoAlbumViewSet(viewsets.ModelViewSet):
 
         return Response({'success': True, 'data': {'photo_album_pk': photo_album.pk}}, status=status.HTTP_200_OK)
 
+    def update(self, request, pk=None):
+        couple = CoupleController.get_couple(request.user)
+        photo_album = PhotoAlbum.objects.get(pk=pk)
+        serializer = PhotoAlbumSerializer(photo_album)
+        return Response({'success': True, 'data': {'title': serializer.data['title']}}, status=status.HTTP_200_OK)
+
 
 class PhotoViewSet(viewsets.ModelViewSet):
     queryset = Photo.objects.all()
