@@ -38,6 +38,13 @@ class UserViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all()
     serializer_class = UserSerializer
 
+    def retrieve(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        serializer = self.get_serializer(self.object)
+
+        # ToDo : Response password 제거
+        return Response({'success': True, 'data': serializer.data}, status=status.HTTP_200_OK)
+
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.DATA)
 
@@ -68,6 +75,12 @@ class UserProfileViewSet(viewsets.ModelViewSet):
     queryset = UserProfile.objects .all()
     serializer_class = UserProfileSerializer
     permission_classes = (IsAuthenticated,)
+
+    def retrieve(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        serializer = self.get_serializer(self.object)
+
+        return Response({'success': True, 'data': serializer.data}, status=status.HTTP_200_OK)
 
     def __validate__(self, gender, birthdate, first_date):
 
