@@ -33,7 +33,7 @@ from couple_mission.libs.common.string import sanitize
 class UserViewSet(viewsets.ModelViewSet):
 
     """
-    Users list, create, retrieve, update, destroy
+    유저 CRUD
     """
     queryset = User.objects.all()
     serializer_class = UserSerializer
@@ -52,14 +52,14 @@ class UserViewSet(viewsets.ModelViewSet):
             self.pre_save(serializer.object)
             self.object = serializer.save(force_insert=True)
             self.post_save(self.object, created=True)
-            headers = self.get_success_headers(serializer.data)
             token = Token.objects.get(user=self.object)
 
             return Response(
-                {'success': True, 'message': _(u'Sign up success.'), 'token': token.key}, status=status.HTTP_201_CREATED,
-                headers=headers)
+                {'success': True, 'message': _(u'가입을 축하합니다.'), 'token': token.key}, status=status.HTTP_201_CREATED)
 
-        return Response({'success': False, 'message': _(u'%s') % serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
+        errors = serializer.errors.values()[
+            0][0] if serializer.errors else None
+        return Response({'success': False, 'message': errors, 'error': '400'}, status=status.HTTP_400_BAD_REQUEST)
 
     """
     유저가 Create 될때 User id와 매칭되는 Token, UserProfile 생성
@@ -72,7 +72,7 @@ class UserViewSet(viewsets.ModelViewSet):
 
 
 class UserProfileViewSet(viewsets.ModelViewSet):
-    queryset = UserProfile.objects .all()
+    queryset = UserProfile.objects.all()
     serializer_class = UserProfileSerializer
     permission_classes = (IsAuthenticated,)
 

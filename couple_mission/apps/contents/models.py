@@ -70,6 +70,14 @@ class Photo(BaseContents):
         return self.image.url if self.image else ''
 
 
+# class LetterPaper(TimeStampModel):
+#     name = models.CharField("Name", max_length=100)
+#     image = models.ImageField("Image", upload_to='letter/', storage=getfilesystem())
+
+#     class Meta:
+#         db_table = "contents_letter_paper"
+
+
 class Letter(BaseContents):
     # Paper Type
     PLAIN = 0

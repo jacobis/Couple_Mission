@@ -1,9 +1,12 @@
+# -*- coding: utf-8 -*-
+
 import re
 
 from django.contrib.auth.models import User
 from django.core.validators import validate_email
 from django.contrib.auth import authenticate
 from django.contrib.auth.hashers import make_password
+from django.utils.translation import ugettext as _
 
 from rest_framework import serializers
 from rest_framework.authtoken.models import Token
@@ -26,20 +29,16 @@ class UserSerializer(serializers.ModelSerializer):
         model = User
         fields = ('email', 'password', 'first_name', 'last_name')
 
-    def validate_email(self, attrs, source):
-        value = attrs[source]
+    def validate(self, attrs):
+        email = attrs['email']
 
-        try:
-            if self.object.email:
-                raise serializers.ValidationError("Email change.")
+        if not email:
+            raise serializers.ValidationError(_(u'이메일을 입력해주세요.'))
 
-        except:
-            if value == '':
-                raise serializers.ValidationError("Email field required.")
-            elif User.objects.filter(email=value).exists():
-                raise serializers.ValidationError("Email already exists.")
-            else:
-                return attrs
+        if User.objects.filter(email=email).exists():
+            raise serializers.ValidationError(_(u'이미 등록된 이메일 주소입니다.'))
+
+        return email
 
     def restore_object(self, attrs, instance=None):
 
@@ -78,12 +77,12 @@ class AuthTokenSerializer(serializers.Serializer):
             if user:
                 if not user.is_active:
                     raise serializers.ValidationError(
-                        'User account is disabled.')
+                        _(u'해당 사용자는 사용불가 상태입니다.'))
                 attrs['user'] = user
                 return attrs
             else:
                 raise serializers.ValidationError(
-                    'Unable to login with provided credentials.')
+                    _(u'이메일 또는 패스워드가 잘못되었습니다.'))
         else:
             raise serializers.ValidationError(
-                'Must include "email" and "password"')
+                _(u'이메일 또는 패스워드를 다시 한 번 확인해주세요.'))
