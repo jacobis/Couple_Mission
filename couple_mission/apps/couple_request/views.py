@@ -2,17 +2,14 @@
 
 # Django
 from django.db.models import Q
-from django.contrib.auth.models import User
 from django.utils.translation import ugettext as _
 
 # REST Framework
-from rest_framework import viewsets
+from rest_framework import viewsets, mixins
 from rest_framework import status
 from rest_framework.response import Response
-from rest_framework.decorators import action, link
 
 # RESE Framework Authentication & Permissions
-from rest_framework.authentication import TokenAuthentication
 from rest_framework.permissions import IsAuthenticated
 
 # Project
@@ -27,7 +24,7 @@ from couple_mission.libs.common.string import sanitize
 from phonenumber_field.phonenumber import to_python
 
 
-class CoupleRequestViewSet(viewsets.ModelViewSet):
+class CoupleRequestViewSet(mixins.CreateModelMixin, viewsets.GenericViewSet):
     qeuryset = CoupleRequest.objects.all()
     serializer_class = CoupleRequestSerializer
     model = CoupleRequest
