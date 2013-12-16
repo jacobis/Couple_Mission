@@ -15,8 +15,8 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.decorators import action, link
 
 # Project
-from couple_mission.apps.couple.models import Couple, CoupleMission
-from couple_mission.apps.couple.serializers import CoupleSerializer, CoupleMissionSerializer
+from couple_mission.apps.couple.models import Couple, CoupleMission, CoupleDday
+from couple_mission.apps.couple.serializers import CoupleSerializer, CoupleMissionSerializer, CoupleDdaySerializer
 from couple_mission.apps.uai.models import Mission, MissionCategory
 from couple_mission.apps.couple.controller import CoupleController
 from couple_mission.apps.uai.mission_handler import OneTimeMissionHandler
@@ -79,7 +79,6 @@ class CoupleMissionViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Mission.active.all()
     serializer_class = CoupleMissionSerializer
     # permission_classes = (IsAuthenticated,)
-    pass
 
     def list(self, request):
         category = request.GET.get("category", "DM")
@@ -141,3 +140,27 @@ class CoupleMissionViewSet(viewsets.ReadOnlyModelViewSet):
             return Response({'success': mission_result}, status=status.HTTP_200_OK)
         else:
             return Response({'success': False, 'type': 'mission', 'message': _(u'이미 수행한 미션입니다.')})
+
+
+class CoupleDdayViewSet(viewsets.ModelViewSet):
+    queryset = CoupleDday.objects.all()
+    serializer_class = CoupleDdaySerializer
+    permission_classes = (IsAuthenticated,)
+
+    def list(self, request):
+        serializer = CoupleDdaySerializer(self.queryset, many=True)
+        return Response({'success': True, 'data': serializer.data}, status=status.HTTP_200_OK)
+
+    def create(self, request, *args, **kwargs):
+        couple = CoupleController.get_couple(request.user)
+        request.DATA['couple'] = couple.pk
+        serializer = self.get_serializer(data=request.DATA)
+
+        if serializer.is_valid():
+            self.pre_save(serializer.object)
+            self.object = serializer.save(force_insert=True)
+            self.post_save(self.object, created=True)
+            headers = self.get_success_headers(serializer.data)
+            return Response({'success': True, 'data': serializer.data}, status=status.HTTP_201_CREATED, headers=headers)
+
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

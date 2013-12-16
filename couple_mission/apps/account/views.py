@@ -23,6 +23,7 @@ from rest_framework.permissions import IsAuthenticated
 
 # Project
 from couple_mission.apps.account.models import UserProfile
+from couple_mission.apps.couple_request.models import CoupleRequest
 from couple_mission.apps.account.serializers import UserSerializer, UserProfileSerializer, AuthTokenSerializer
 from couple_mission.apps.couple.controller import CoupleController
 
@@ -186,8 +187,12 @@ class ObtainAuthToken(APIView):
         if serializer.is_valid():
             token, created = Token.objects.get_or_create(
                 user=serializer.object['user'])
+
             return Response({'success': True, 'token': token.key})
-        return Response({'success': False, 'message': serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
+
+        errors = serializer.errors.values()[
+            0][0] if serializer.errors else None
+        return Response({'success': False, 'message': errors, 'error': '400'}, status=status.HTTP_400_BAD_REQUEST)
 
 
 class Me(APIView):

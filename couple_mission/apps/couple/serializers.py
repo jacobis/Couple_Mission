@@ -1,5 +1,5 @@
 from django.contrib.auth.models import User
-from couple_mission.apps.couple.models import Couple, CoupleMission
+from couple_mission.apps.couple.models import Couple, CoupleMission, CoupleDday
 
 from rest_framework import serializers
 
@@ -16,3 +16,9 @@ class CoupleMissionSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = CoupleMission
+
+
+class CoupleDdaySerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = CoupleDday

@@ -32,46 +32,54 @@ class CoupleRequestViewSet(mixins.CreateModelMixin, viewsets.GenericViewSet):
 
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.DATA)
-        user = request.user
-        message = _(u"이미 커플인 회원입니다.")
+        self.user = request.user
 
-        if not Couple.objects.filter(Q(partner_a=user) | Q(partner_b=user)):
-            request_sender = request.DATA['request_sender']
-            request_receiver = request.DATA['request_receiver']
-            result, message = self.validate_couple_request(
-                request_sender, request_receiver)
-            if result:
-                requests = CoupleRequest.objects.filter(
-                    request_receiver=request_sender, connected=False)
+        request_sender = request.DATA['request_sender']
+        request_receiver = request.DATA['request_receiver']
+        result, message = self.validate_couple_request(
+            request_sender, request_receiver)
+        if result:
+            requests = CoupleRequest.objects.filter(
+                request_receiver=request_sender, connected=False).exclude(user=self.user)
 
-                if requests:
-                    for r in requests:
-                        if unicode(r.request_sender) == request_receiver:
-                            couple, created = Couple.objects.get_or_create(
-                                partner_a=user, partner_b=r.user)
-                            r.connected = True
-                            r.save()
+            if requests:
+                message = _(u'축하합니다. 커플이 되었습니다.')
+                success_status_code = status.HTTP_200_OK
+                for request in requests:
+                    if unicode(request.request_sender) == request_receiver:
+                        couple, created = Couple.objects.get_or_create(
+                            partner_a=self.user, partner_b=request.user)
+                        request.connected = True
+                        request.save()
 
-                            return Response({'success': True, 'message': _(u'Congratulation! Couple Connencted.')}, status=status.HTTP_201_CREATED)
-                else:
-                    CoupleRequest.objects.get_or_create(
-                        user=user, request_sender=request_sender, request_receiver=request_receiver)
+            else:
+                message = _(u'상대방의 커플 요청을 기다리고 있습니다.')
+                success_status_code = status.HTTP_201_CREATED
+                couple_request, created = CoupleRequest.objects.get_or_create(
+                    user=self.user)
+                couple_request.request_sender = request_sender
+                couple_request.request_receiver = request_receiver
+                couple_request.save()
 
-                    return Response({'success': True, 'message': _(u'Waiting for response from partner.')}, status=status.HTTP_201_CREATED)
+            return Response({'success': True, 'message': message}, status=success_status_code)
 
         return Response({'success': False, 'message': message}, status=status.HTTP_400_BAD_REQUEST)
 
     def validate_couple_request(self, request_sender, request_receiver):
         request_sender = to_python(request_sender)
         request_receiver = to_python(request_receiver)
+        user = self.user
+
+        if Couple.objects.filter(Q(partner_a=user) | Q(partner_b=user)):
+            return False, _(u"이미 커플로 등록된 이메일입니다.")
 
         if request_sender is None or request_receiver is None:
-            return False, _(u"전화번호는 필수값 입니다.")
+            return False, _(u"전화번호를 입력해주세요.")
 
         if not request_sender.is_valid() and not request_receiver.is_valid():
-            return False, _(u"잘못된 형식의 번호입니다.")
+            return False, _(u"전화번호를 다시 한 번 확인해주세요.")
 
         if request_sender == request_receiver:
-            return False, _(u"나의 번호와 상대방 번호는 같을 수 없습니다.")
+            return False, _(u"전화번호를 다시 한 번 확인해주세요.")
 
         return True, None

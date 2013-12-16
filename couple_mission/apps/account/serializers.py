@@ -29,8 +29,8 @@ class UserSerializer(serializers.ModelSerializer):
         model = User
         fields = ('email', 'password', 'first_name', 'last_name')
 
-    def validate(self, attrs):
-        email = attrs['email']
+    def validate_email(self, attrs, source):
+        email = attrs[source]
 
         if not email:
             raise serializers.ValidationError(_(u'이메일을 입력해주세요.'))
@@ -38,7 +38,7 @@ class UserSerializer(serializers.ModelSerializer):
         if User.objects.filter(email=email).exists():
             raise serializers.ValidationError(_(u'이미 등록된 이메일 주소입니다.'))
 
-        return email
+        return attrs
 
     def restore_object(self, attrs, instance=None):
 

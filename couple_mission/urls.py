@@ -10,7 +10,7 @@ from rest_framework.authtoken.views import obtain_auth_token
 # Projects
 from couple_mission.apps.account.views import UserViewSet, UserProfileViewSet
 from couple_mission.apps.couple_request.views import CoupleRequestViewSet
-from couple_mission.apps.couple.views import CoupleViewSet, CoupleMissionViewSet
+from couple_mission.apps.couple.views import CoupleViewSet, CoupleMissionViewSet, CoupleDdayViewSet
 from couple_mission.apps.contents.views import CommentViewSet, PhotoAlbumViewSet, PhotoViewSet, LetterViewSet
 from couple_mission.apps.uai.views import BadgeViewSet, TitleViewSet
 from couple_mission.apps.headquarter.views import NoticeViewSet
@@ -51,6 +51,7 @@ router.register(r'user_profiles', UserProfileViewSet)
 router.register(r'couple_requests', CoupleRequestViewSet)
 router.register(r'couples', CoupleViewSet)
 router.register(r'couple_missions', CoupleMissionViewSet)
+router.register(r'couple_ddays', CoupleDdayViewSet)
 router.register(r'badges', BadgeViewSet)
 router.register(r'titles', TitleViewSet)
 router.register(r'comments', CommentViewSet)
