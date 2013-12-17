@@ -149,6 +149,7 @@ class CoupleDdayViewSet(viewsets.ModelViewSet):
 
     def list(self, request):
         serializer = CoupleDdaySerializer(self.queryset, many=True)
+
         return Response({'success': True, 'data': serializer.data}, status=status.HTTP_200_OK)
 
     def create(self, request, *args, **kwargs):
