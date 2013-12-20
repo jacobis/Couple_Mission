@@ -48,7 +48,8 @@ class CoupleViewSet(viewsets.ModelViewSet):
             'image'] = partner_a_image.url if partner_a_image else ''
         partner_a_json['birthdate'] = partner_a_birthdate
         partner_b_json['name'] = partner_b_name
-        partner_b_json['image'] = partner_b_image if partner_b_image else ''
+        partner_b_json[
+            'image'] = partner_b_image.url if partner_b_image else ''
         partner_b_json['birthdate'] = partner_b_birthdate
         first_date = couple.first_date
 

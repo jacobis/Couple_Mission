@@ -175,6 +175,7 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.messages.middleware.MessageMiddleware',
 
     'couple_mission.middleware.TimezoneMiddleware',
+    'django_user_agents.middleware.UserAgentMiddleware',
 )
 # END MIDDLEWARE CONFIGURATION
 
@@ -218,6 +219,8 @@ THIRD_PARTY_APPS = (
     'rest_framework.authtoken',
 
     'django_extensions',
+
+    'django_user_agents',
 )
 
 LOCAL_APPS = (
