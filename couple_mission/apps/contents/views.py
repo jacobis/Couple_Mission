@@ -58,7 +58,7 @@ class PhotoAlbumViewSet(viewsets.ModelViewSet):
         photo_album = PhotoAlbum.objects.create(
             couple=couple, title=title)
 
-        return Response({'success': True, 'data': {'photo_album_pk': photo_album.pk}}, status=status.HTTP_200_OK)
+        return Response({'success': True, 'data': {'photo_album_pk': photo_album.pk}}, status=status.HTTP_201_CREATED)
 
     def update(self, request, pk=None):
         couple = CoupleController.get_couple(request.user)
@@ -80,24 +80,28 @@ class PhotoViewSet(viewsets.ModelViewSet):
         return Response({'success': True, 'data': serializer.data}, status=status.HTTP_200_OK)
 
     def retrieve(self, request, *args, **kwargs):
-        couple = CoupleController.get_couple(request.user)
         self.object = self.get_object()
+        comments = self.object.comment_manager.comments.all()
         serializer = self.get_serializer(self.object)
-        return Response(serializer.data)
+        comments_serializer = CommentSerializer(comments, many=True)
+
+        comments_data = comments_serializer.data
+
+        return Response({'success': True, 'data': {'photo': serializer.data, 'comments': comments_data}}, status=status.HTTP_200_OK)
 
     def create(self, request, *args, **kwargs):
         user = request.user
-        couple = CoupleController.get_couple(user)
+        couple = CoupleController.get_couple(request.user)
 
         try:
-            album_pk = request.DATA.get('album')
-            album = PhotoAlbum.objects.get(pk=album_pk)
+            album_object = request.DATA.get('album')
+            album = PhotoAlbum.objects.get(pk=album_object.pk)
         except:
             album = None
 
-        try:
-            image = request.FILES.get('image')
-        except:
+        image = request.FILES.get('image')
+
+        if image is None:
             return Response({'success': False, 'message': _(u'사진 업로드 실패')}, status=status.HTTP_400_BAD_REQUEST)
 
         try:
@@ -112,19 +116,7 @@ class PhotoViewSet(viewsets.ModelViewSet):
         mission_handler = MissionHandler(user)
         mission_handler.new_cleared_missions()
 
-        return Response({'success': True, 'data': {'photo_pk': photo.pk}}, status=status.HTTP_200_OK)
-
-    @action(methods=['POST'])
-    def comment(self, request, pk=None):
-        user = request.user
-        photo = Photo.objects.get(pk=pk)
-        content = request.DATA.get('content')
-        content = sanitize(content)
-
-        comment = Comment.objects.create(
-            comment_manager=photo.comment_manager, user=user, content=content)
-
-        return Response({'success': True, 'data': {'comment_pk': comment.pk}}, status=status.HTTP_201_CREATED)
+        return Response({'success': True, 'data': {'photo_pk': photo.pk}}, status=status.HTTP_201_CREATED)
 
 
 class LetterViewSet(viewsets.ModelViewSet):
@@ -151,14 +143,12 @@ class LetterViewSet(viewsets.ModelViewSet):
         receiver = letter.receiver.get_full_name()
         content = letter.content
         paper_type = letter.paper_type
-        comments = letter.comment_manager.comments.all()
         updated_at = letter.updated_at
-        comments_serializer = CommentSerializer(comments, many=True)
 
         letter_data = {'sender': sender, 'receiver': receiver,
                        'content': content, 'updated_at': updated_at, 'paper_type': paper_type}
 
-        return Response({'success': True, 'data': {'letter': letter_data, 'comments': comments_serializer.data}}, status=status.HTTP_200_OK)
+        return Response({'success': True, 'data': {'letter': letter_data}}, status=status.HTTP_200_OK)
 
     def create(self, request, *args, **kwargs):
         user = request.user
@@ -183,3 +173,15 @@ class LetterViewSet(viewsets.ModelViewSet):
         mission_handler.new_cleared_missions()
 
         return Response({'success': True, 'data': {'letter_pk': letter.pk}}, status=status.HTTP_201_CREATED)
+
+    @action(methods=['POST'])
+    def comment(self, request, pk=None):
+        user = request.user
+        letter = Letter.objects.get(pk=pk)
+        content = request.DATA.get('content')
+        content = sanitize(content)
+
+        comment = Comment.objects.create(
+            comment_manager=letter.comment_manager, user=user, content=content)
+
+        return Response({'success': True, 'data': {'comment_pk': comment.pk}}, status=status.HTTP_201_CREATED)
