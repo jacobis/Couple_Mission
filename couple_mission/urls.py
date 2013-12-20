@@ -37,6 +37,7 @@ urlpatterns += patterns('couple_mission.apps.account',
 urlpatterns += patterns('couple_mission.apps.uai',
                         url(r'^$',
                             'views.main_index'),
+                        url(r'^app_download$', 'views.app_download'),
                         )
 
 if settings.DEBUG:

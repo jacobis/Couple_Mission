@@ -1,7 +1,9 @@
 # -*- coding: utf-8 -*-
 
 import datetime
+import platform
 
+from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.utils.translation import ugettext as _
 
@@ -35,3 +37,13 @@ class TitleViewSet(viewsets.ModelViewSet):
 
 def main_index(request):
     return render(request, 'index.html')
+
+
+def app_download(request):
+    user_agent = request.user_agent.os.family
+    print user_agent
+    if user_agent == 'Android':
+        return HttpResponseRedirect("http://naver.com")
+
+    else:
+        return HttpResponseRedirect("http://naver.com")
