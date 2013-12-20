@@ -118,6 +118,18 @@ class PhotoViewSet(viewsets.ModelViewSet):
 
         return Response({'success': True, 'data': {'photo_pk': photo.pk}}, status=status.HTTP_201_CREATED)
 
+    @action(methods=['POST'])
+    def comment(self, request, pk=None):
+        user = request.user
+        photo = Photo.objects.get(pk=pk)
+        content = request.DATA.get('content')
+        content = sanitize(content)
+
+        comment = Comment.objects.create(
+            comment_manager=photo.comment_manager, user=user, content=content)
+
+        return Response({'success': True, 'data': {'comment_pk': comment.pk}}, status=status.HTTP_201_CREATED)
+
 
 class LetterViewSet(viewsets.ModelViewSet):
     queryset = Letter.objects.all()
@@ -173,15 +185,3 @@ class LetterViewSet(viewsets.ModelViewSet):
         mission_handler.new_cleared_missions()
 
         return Response({'success': True, 'data': {'letter_pk': letter.pk}}, status=status.HTTP_201_CREATED)
-
-    @action(methods=['POST'])
-    def comment(self, request, pk=None):
-        user = request.user
-        letter = Letter.objects.get(pk=pk)
-        content = request.DATA.get('content')
-        content = sanitize(content)
-
-        comment = Comment.objects.create(
-            comment_manager=letter.comment_manager, user=user, content=content)
-
-        return Response({'success': True, 'data': {'comment_pk': comment.pk}}, status=status.HTTP_201_CREATED)
