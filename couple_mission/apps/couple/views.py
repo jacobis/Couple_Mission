@@ -20,19 +20,23 @@ from couple_mission.apps.couple.serializers import CoupleSerializer, CoupleMissi
 from couple_mission.apps.uai.models import Mission, MissionCategory
 from couple_mission.apps.couple.controller import CoupleController
 from couple_mission.apps.uai.mission_handler import OneTimeMissionHandler
+from couple_mission.apps.account.models import UserProfile
 
 # Project Libs
 from couple_mission.libs.common.string import sanitize
 from couple_mission.libs.utils.datetime import normalize
+from couple_mission.libs.permissions import IsOwnerOrCoupleOnly
 
 
 class CoupleViewSet(viewsets.ModelViewSet):
     queryset = Couple.objects.all()
     serializer_class = CoupleSerializer
-    permission_classes = (IsAuthenticated,)
+    permission_classes = (IsOwnerOrCoupleOnly,)
 
     def retrieve(self, reqeust, pk=None):
         couple = Couple.objects.get(pk=pk)
+
+        # Partner detail
         partner_a_json = {}
         partner_b_json = {}
         partner_a = couple.partner_a
@@ -51,10 +55,12 @@ class CoupleViewSet(viewsets.ModelViewSet):
         partner_b_json[
             'image'] = partner_b_image.url if partner_b_image else ''
         partner_b_json['birthdate'] = partner_b_birthdate
+
+        image = couple.image.url if couple.image else ''
         first_date = couple.first_date
 
         return Response({'success': True,
-                        'data': {'partner_a': partner_a_json, 'partner_b': partner_b_json, 'first_date': first_date}}, status=status.HTTP_200_OK)
+                        'data': {'partner_a': partner_a_json, 'partner_b': partner_b_json, 'first_date': first_date, 'image': image}}, status=status.HTTP_200_OK)
 
     def update(self, request, pk=None):
         couple = Couple.objects.get(pk=pk)
@@ -149,13 +155,17 @@ class CoupleDdayViewSet(viewsets.ModelViewSet):
     permission_classes = (IsAuthenticated,)
 
     def list(self, request):
-        serializer = CoupleDdaySerializer(self.queryset, many=True)
+        couple_object = CoupleController.get_couple(request.user)
+        couple_ddays = CoupleDday.objects.filter(couple=couple_object)
+        serializer = CoupleDdaySerializer(couple_ddays, many=True)
 
         return Response({'success': True, 'data': serializer.data}, status=status.HTTP_200_OK)
 
     def create(self, request, *args, **kwargs):
         couple = CoupleController.get_couple(request.user)
         request.DATA['couple'] = couple.pk
+        request.DATA['title'] = sanitize(request.DATA['title'])
+
         serializer = self.get_serializer(data=request.DATA)
 
         if serializer.is_valid():

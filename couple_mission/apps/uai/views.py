@@ -43,7 +43,6 @@ def app_download(request):
     user_agent = request.user_agent.os.family
     print user_agent
     if user_agent == 'Android':
-        return HttpResponseRedirect("http://naver.com")
-
+        return HttpResponseRedirect("https://play.google.com/apps/testing/nalebe.couplemission.ui")
     else:
-        return HttpResponseRedirect("http://naver.com")
+        return render(request, 'app_download.html')

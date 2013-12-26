@@ -19,7 +19,7 @@ class UserProfileSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = UserProfile
-        fields = ('user', 'birthdate', 'gender', 'image')
+        fields = ('id', 'user', 'birthdate', 'gender', 'image')
         read_only_fields = ('user',)
 
 
@@ -27,7 +27,7 @@ class UserSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ('email', 'password', 'first_name', 'last_name')
+        fields = ('id', 'email', 'password', 'first_name', 'last_name')
 
     def validate_email(self, attrs, source):
         email = attrs[source]

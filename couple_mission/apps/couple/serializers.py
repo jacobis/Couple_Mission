@@ -5,13 +5,16 @@ from couple_mission.apps.couple.models import Couple, CoupleMission, CoupleDday
 
 from rest_framework import serializers
 
+# Project Libs
+from couple_mission.libs.common.string import sanitize
+
 
 class CoupleSerializer(serializers.ModelSerializer):
     image = serializers.CharField(source='image_url')
 
     class Meta:
         model = Couple
-        fields = ('partner_a', 'partner_b', 'first_date', 'image')
+        fields = ('id', 'partner_a', 'partner_b', 'first_date', 'image')
 
 
 class CoupleMissionSerializer(serializers.ModelSerializer):
@@ -25,6 +28,7 @@ class CoupleDdaySerializer(serializers.ModelSerializer):
 
     class Meta:
         model = CoupleDday
+        fields = ('id', 'couple', 'dday', 'title', 'date')
 
     def get_dday(self, obj):
         dday = obj.date - datetime.utcnow().date()

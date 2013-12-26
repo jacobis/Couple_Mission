@@ -75,7 +75,6 @@ class CoupleDday(TimeStampModel):
     couple = models.ForeignKey(Couple)
     date = models.DateField("Date")
     title = models.CharField("Title", max_length=100)
-    # dday =
 
     class Meta:
         db_table = "couple_d-day"

@@ -55,8 +55,7 @@ class PhotoAlbumViewSet(viewsets.ModelViewSet):
         title = request.DATA.get('title')
         title = sanitize(title)
 
-        photo_album = PhotoAlbum.objects.create(
-            couple=couple, title=title)
+        photo_album = PhotoAlbum.objects.create(couple=couple, title=title)
 
         return Response({'success': True, 'data': {'photo_album_pk': photo_album.pk}}, status=status.HTTP_201_CREATED)
 
@@ -94,8 +93,8 @@ class PhotoViewSet(viewsets.ModelViewSet):
         couple = CoupleController.get_couple(request.user)
 
         try:
-            album_object = request.DATA.get('album')
-            album = PhotoAlbum.objects.get(pk=album_object.pk)
+            album_pk = request.DATA.get('album')
+            album = PhotoAlbum.objects.get(pk=album_pk)
         except:
             album = None
 

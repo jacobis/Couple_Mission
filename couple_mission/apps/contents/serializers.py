@@ -24,7 +24,7 @@ class PhotoSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Photo
-        fields = ('user', 'couple', 'album', 'image',
+        fields = ('id', 'user', 'couple', 'album', 'image',
                   'description', 'comment_manager', 'created_at', 'updated_at')
 
 
@@ -36,5 +36,6 @@ class LetterSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Letter
-        fields = ('user', 'couple', 'receiver', 'content', 'already_read',
+        fields = (
+            'id', 'user', 'couple', 'receiver', 'content', 'already_read',
                   'paper_type', 'gender', 'created_at', 'updated_at')

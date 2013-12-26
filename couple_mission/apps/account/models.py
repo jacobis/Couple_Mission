@@ -19,6 +19,7 @@ class UserProfile(TimeStampModel):
     image = models.ImageField(
         "Image", upload_to='user_profile/', storage=getfilesystem(), null=True, blank=True)
     starter = models.BooleanField("Starter", default=False)
+    mission = models.BooleanField("Mission", default=False)
 
     class Meta:
         db_table = "account_user_profile"

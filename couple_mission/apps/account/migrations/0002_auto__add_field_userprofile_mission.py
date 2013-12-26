@@ -8,15 +8,15 @@ from django.db import models
 class Migration(SchemaMigration):
 
     def forwards(self, orm):
-        # Adding field 'UserProfile.starter'
-        db.add_column('account_user_profile', 'starter',
+        # Adding field 'UserProfile.mission'
+        db.add_column('account_user_profile', 'mission',
                       self.gf('django.db.models.fields.BooleanField')(default=False),
                       keep_default=False)
 
 
     def backwards(self, orm):
-        # Deleting field 'UserProfile.starter'
-        db.delete_column('account_user_profile', 'starter')
+        # Deleting field 'UserProfile.mission'
+        db.delete_column('account_user_profile', 'mission')
 
 
     models = {
@@ -26,6 +26,7 @@ class Migration(SchemaMigration):
             'created_at': ('django.db.models.fields.DateTimeField', [], {'auto_now_add': 'True', 'blank': 'True'}),
             'gender': ('django.db.models.fields.CharField', [], {'max_length': '1', 'null': 'True', 'blank': 'True'}),
             'image': ('django.db.models.fields.files.ImageField', [], {'max_length': '100', 'null': 'True', 'blank': 'True'}),
+            'mission': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
             'starter': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
             'updated_at': ('django.db.models.fields.DateTimeField', [], {'auto_now': 'True', 'blank': 'True'}),
             'user': ('django.db.models.fields.related.OneToOneField', [], {'to': u"orm['auth.User']", 'unique': 'True', 'primary_key': 'True'})

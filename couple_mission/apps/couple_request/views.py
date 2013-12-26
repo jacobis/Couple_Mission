@@ -24,7 +24,7 @@ from couple_mission.libs.common.string import sanitize
 from phonenumber_field.phonenumber import to_python
 
 
-class CoupleRequestViewSet(mixins.CreateModelMixin, viewsets.GenericViewSet):
+class CoupleRequestViewSet(mixins.CreateModelMixin, mixins.DestroyModelMixin, viewsets.GenericViewSet):
     qeuryset = CoupleRequest.objects.all()
     serializer_class = CoupleRequestSerializer
     model = CoupleRequest
@@ -38,6 +38,7 @@ class CoupleRequestViewSet(mixins.CreateModelMixin, viewsets.GenericViewSet):
         request_receiver = request.DATA['request_receiver']
         result, message = self.validate_couple_request(
             request_sender, request_receiver)
+
         if result:
             requests = CoupleRequest.objects.filter(
                 request_receiver=request_sender, connected=False).exclude(user=self.user)
@@ -51,17 +52,18 @@ class CoupleRequestViewSet(mixins.CreateModelMixin, viewsets.GenericViewSet):
                             partner_a=self.user, partner_b=request.user)
                         request.connected = True
                         request.save()
+                        couple_request_id = request.pk
+                        connected = request.connected
 
             else:
                 message = _(u'상대방의 커플 요청을 기다리고 있습니다.')
                 success_status_code = status.HTTP_201_CREATED
                 couple_request, created = CoupleRequest.objects.get_or_create(
-                    user=self.user)
-                couple_request.request_sender = request_sender
-                couple_request.request_receiver = request_receiver
-                couple_request.save()
+                    user=self.user, request_sender=request_sender, request_receiver=request_receiver)
+                couple_request_id = couple_request.pk
+                connected = couple_request.connected
 
-            return Response({'success': True, 'message': message}, status=success_status_code)
+            return Response({'success': True, 'message': message, 'data': {'id': couple_request_id, 'connected': connected}}, status=success_status_code)
 
         return Response({'success': False, 'message': message}, status=status.HTTP_400_BAD_REQUEST)
 

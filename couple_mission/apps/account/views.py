@@ -202,8 +202,9 @@ class Me(APIView):
         couple_id = couple.pk if couple else 0
         user_id = request.user.pk
         starter = request.user.userprofile.starter
+        mission = request.user.userprofile.mission
 
-        return Response({'success': True, 'couple_id': couple_id, 'user_id': user_id, 'starter': starter}, status=status.HTTP_200_OK)
+        return Response({'success': True, 'couple_id': couple_id, 'user_id': user_id, 'starter': starter, 'mission': mission}, status=status.HTTP_200_OK)
 
 
 obtain_auth_token = ObtainAuthToken.as_view()
