@@ -12,7 +12,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': 'uai_db',
         'USER': 'uai_admin',
-        'PASSWORD': 'cubbying120227!',
+        'PASSWORD': '',
         'HOST': '10.0.1.4',
         'PORT': '6432',
     }
