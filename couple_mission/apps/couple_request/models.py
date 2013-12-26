@@ -1,8 +1,7 @@
 from django.db import models
+from django.contrib.auth.models import User
 
 from phonenumber_field.modelfields import PhoneNumberField
-
-from couple_mission.apps.account.models import User
 
 # Project Libs
 from couple_mission.libs.common.model import TimeStampModel

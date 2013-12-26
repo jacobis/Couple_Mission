@@ -227,10 +227,11 @@ LOCAL_APPS = (
     # Project Apps
     'apps.account',
     'apps.contents',
-    'apps.couple',
-    'apps.points',
-    'apps.uai',
     'apps.couple_request',
+    'apps.couple',
+    'apps.mission',
+    'apps.uai',
+    'apps.points',
     'apps.headquarter',
 )
 

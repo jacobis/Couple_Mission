@@ -1,7 +1,7 @@
 from django.db import models
+from django.contrib.auth.models import User
 
 # Project
-from couple_mission.apps.account.models import User
 from couple_mission.apps.couple.models import Couple, CoupleMission
 
 # Project Libs
