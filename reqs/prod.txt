@@ -1,5 +1,7 @@
 -r common.txt
 
+azure==0.6 # 0.6.1 to 0.6.2 failed
+
 cssmin==0.2.0
 jsmin==2.0.7
 
