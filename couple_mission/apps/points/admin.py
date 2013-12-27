@@ -3,7 +3,6 @@ from django.contrib.auth.models import User
 
 # Project
 from couple_mission.apps.points.models import Points
-from couple_mission.apps.couple.models import Couple, CoupleMission
 
 
 class AdminPoints(admin.ModelAdmin):

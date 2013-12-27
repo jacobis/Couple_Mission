@@ -18,15 +18,30 @@ class Migration(SchemaMigration):
         ))
         db.send_create_signal(u'mission', ['MissionCategory'])
 
+        # Adding model 'MissionType'
+        db.create_table('mission_mission_type', (
+            (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
+            ('created_at', self.gf('django.db.models.fields.DateTimeField')(auto_now_add=True, blank=True)),
+            ('updated_at', self.gf('django.db.models.fields.DateTimeField')(auto_now=True, blank=True)),
+            ('identity', self.gf('django.db.models.fields.CharField')(max_length=10)),
+            ('name', self.gf('django.db.models.fields.CharField')(max_length=100)),
+            ('image', self.gf('django.db.models.fields.files.ImageField')(max_length=100, null=True, blank=True)),
+        ))
+        db.send_create_signal(u'mission', ['MissionType'])
+
         # Adding model 'Mission'
         db.create_table('mission_mission', (
             (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
             ('created_at', self.gf('django.db.models.fields.DateTimeField')(auto_now_add=True, blank=True)),
             ('updated_at', self.gf('django.db.models.fields.DateTimeField')(auto_now=True, blank=True)),
             ('category', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['mission.MissionCategory'])),
+            ('mission_type', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['mission.MissionType'])),
             ('title', self.gf('django.db.models.fields.CharField')(max_length=200)),
-            ('description', self.gf('django.db.models.fields.TextField')(default='', null=True, blank=True)),
+            ('description1', self.gf('django.db.models.fields.TextField')(default='', null=True, blank=True)),
+            ('description2', self.gf('django.db.models.fields.TextField')(default='', null=True, blank=True)),
             ('image', self.gf('django.db.models.fields.files.ImageField')(max_length=100, null=True, blank=True)),
+            ('question', self.gf('django.db.models.fields.CharField')(max_length=400, null=True, blank=True)),
+            ('answer', self.gf('django.db.models.fields.CharField')(max_length=400, null=True, blank=True)),
             ('point', self.gf('django.db.models.fields.IntegerField')(default='0')),
             ('is_active', self.gf('django.db.models.fields.BooleanField')(default=False)),
         ))
@@ -50,6 +65,9 @@ class Migration(SchemaMigration):
     def backwards(self, orm):
         # Deleting model 'MissionCategory'
         db.delete_table('mission_mission_category')
+
+        # Deleting model 'MissionType'
+        db.delete_table('mission_mission_type')
 
         # Deleting model 'Mission'
         db.delete_table('mission_mission')
@@ -107,13 +125,17 @@ class Migration(SchemaMigration):
         },
         u'mission.mission': {
             'Meta': {'ordering': "['created_at']", 'object_name': 'Mission'},
+            'answer': ('django.db.models.fields.CharField', [], {'max_length': '400', 'null': 'True', 'blank': 'True'}),
             'category': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['mission.MissionCategory']"}),
             'created_at': ('django.db.models.fields.DateTimeField', [], {'auto_now_add': 'True', 'blank': 'True'}),
-            'description': ('django.db.models.fields.TextField', [], {'default': "''", 'null': 'True', 'blank': 'True'}),
+            'description1': ('django.db.models.fields.TextField', [], {'default': "''", 'null': 'True', 'blank': 'True'}),
+            'description2': ('django.db.models.fields.TextField', [], {'default': "''", 'null': 'True', 'blank': 'True'}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'image': ('django.db.models.fields.files.ImageField', [], {'max_length': '100', 'null': 'True', 'blank': 'True'}),
             'is_active': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
+            'mission_type': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['mission.MissionType']"}),
             'point': ('django.db.models.fields.IntegerField', [], {'default': "'0'"}),
+            'question': ('django.db.models.fields.CharField', [], {'max_length': '400', 'null': 'True', 'blank': 'True'}),
             'title': ('django.db.models.fields.CharField', [], {'max_length': '200'}),
             'updated_at': ('django.db.models.fields.DateTimeField', [], {'auto_now': 'True', 'blank': 'True'})
         },
@@ -122,6 +144,15 @@ class Migration(SchemaMigration):
             'created_at': ('django.db.models.fields.DateTimeField', [], {'auto_now_add': 'True', 'blank': 'True'}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'identity': ('django.db.models.fields.CharField', [], {'max_length': '10'}),
+            'name': ('django.db.models.fields.CharField', [], {'max_length': '100'}),
+            'updated_at': ('django.db.models.fields.DateTimeField', [], {'auto_now': 'True', 'blank': 'True'})
+        },
+        u'mission.missiontype': {
+            'Meta': {'object_name': 'MissionType', 'db_table': "'mission_mission_type'"},
+            'created_at': ('django.db.models.fields.DateTimeField', [], {'auto_now_add': 'True', 'blank': 'True'}),
+            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'identity': ('django.db.models.fields.CharField', [], {'max_length': '10'}),
+            'image': ('django.db.models.fields.files.ImageField', [], {'max_length': '100', 'null': 'True', 'blank': 'True'}),
             'name': ('django.db.models.fields.CharField', [], {'max_length': '100'}),
             'updated_at': ('django.db.models.fields.DateTimeField', [], {'auto_now': 'True', 'blank': 'True'})
         },

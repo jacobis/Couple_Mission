@@ -25,13 +25,32 @@ class MissionCategory(TimeStampModel):
         return self.name
 
 
+class MissionType(TimeStampModel):
+    identity = models.CharField("Identify", max_length=10)
+    name = models.CharField("Name", max_length=100)
+    image = models.ImageField(
+        "Image", upload_to='mission/', storage=getfilesystem('admincontents'), blank=True, null=True)
+
+    class Meta:
+        db_table = "mission_mission_type"
+
+    def __unicode__(self):
+        return self.name
+
+
 class Mission(TimeStampModel):
     category = models.ForeignKey(MissionCategory)
+    mission_type = models.ForeignKey(MissionType)
     title = models.CharField("Title", max_length=200)
-    description = models.TextField(
-        "Description", default="", blank=True, null=True)
+    description1 = models.TextField(
+        "Description1", default="", blank=True, null=True)
+    description2 = models.TextField(
+        "Description2", default="", blank=True, null=True)
     image = models.ImageField(
-        "Image", upload_to='mission/', storage=getfilesystem(), blank=True, null=True)
+        "Image", upload_to='mission/', storage=getfilesystem('admincontents'), blank=True, null=True)
+    question = models.CharField(
+        "Question", max_length=400, blank=True, null=True)
+    answer = models.CharField("Answer", max_length=400, blank=True, null=True)
     point = models.IntegerField("Point", default="0")
     is_active = models.BooleanField("Is Active", default=False)
 

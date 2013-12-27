@@ -2,7 +2,7 @@ from django.db import models
 from django.contrib.auth.models import User
 
 # Project
-from couple_mission.apps.uai.models import Mission, Badge, Title
+from couple_mission.apps.uai.models import Badge, Title
 
 # Project Libs
 from couple_mission.libs.common.model import TimeStampModel
@@ -16,7 +16,7 @@ class Couple(TimeStampModel):
         User, related_name='partner_b', null=True, blank=True)
     first_date = models.DateField("Date", null=True, blank=True)
     image = models.ImageField(
-        "Image", upload_to='couple/', storage=getfilesystem(), null=True, blank=True)
+        "Image", upload_to='couple/', storage=getfilesystem('usercontents'), null=True, blank=True)
 
     class Meta:
         unique_together = ("partner_a", "partner_b")
@@ -29,28 +29,6 @@ class Couple(TimeStampModel):
     @property
     def image_url(self):
         return self.image.url if self.image else ''
-
-
-class CoupleMission(TimeStampModel):
-    # Couple Mission Status
-    AVAILABLE = 0
-    DOING = 1
-    REWARDABLE = 2
-    DONE = 3
-
-    COUPLE_MISSION_STATUS_CHOICE = (
-        (AVAILABLE, 0), (DOING, 1), (REWARDABLE, 2), (DONE, 3))
-
-    couple = models.ForeignKey(Couple)
-    mission = models.ForeignKey(Mission)
-    status = models.IntegerField(
-        "Status", choices=COUPLE_MISSION_STATUS_CHOICE, default=AVAILABLE)
-    started_datetime = models.DateTimeField(blank=True, null=True)
-    claered_datetime = models.DateTimeField(blank=True, null=True)
-
-    class Meta:
-        db_table = "couple_mission"
-        ordering = ['-updated_at']
 
 
 class CoupleBadge(TimeStampModel):

@@ -1,7 +1,7 @@
 from datetime import datetime, date
 
 from django.contrib.auth.models import User
-from couple_mission.apps.couple.models import Couple, CoupleMission, CoupleDday
+from couple_mission.apps.couple.models import Couple, CoupleDday
 
 from rest_framework import serializers
 
@@ -15,12 +15,6 @@ class CoupleSerializer(serializers.ModelSerializer):
     class Meta:
         model = Couple
         fields = ('id', 'partner_a', 'partner_b', 'first_date', 'image')
-
-
-class CoupleMissionSerializer(serializers.ModelSerializer):
-
-    class Meta:
-        model = CoupleMission
 
 
 class CoupleDdaySerializer(serializers.ModelSerializer):

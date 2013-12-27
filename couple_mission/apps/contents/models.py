@@ -57,7 +57,7 @@ class PhotoAlbum(TimeStampModel):
 class Photo(BaseContents):
     album = models.ForeignKey(PhotoAlbum, default="", blank=True, null=True)
     image = models.ImageField(
-        "Image", upload_to='photo/', storage=getfilesystem())
+        "Image", upload_to='photo/', storage=getfilesystem('usercontents'))
     description = models.TextField(
         "Description", default="", blank=True, null=True)
 
@@ -68,14 +68,6 @@ class Photo(BaseContents):
     @property
     def image_url(self):
         return self.image.url if self.image else ''
-
-
-# class LetterPaper(TimeStampModel):
-#     name = models.CharField("Name", max_length=100)
-#     image = models.ImageField("Image", upload_to='letter/', storage=getfilesystem())
-
-#     class Meta:
-#         db_table = "contents_letter_paper"
 
 
 class Letter(BaseContents):

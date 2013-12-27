@@ -1,12 +1,6 @@
-from couple_mission.apps.uai.models import MissionCategory, Badge, Title
+from couple_mission.apps.uai.models import Badge, Title
 
 from rest_framework import serializers
-
-
-class MissionCategorySerializer(serializers.ModelSerializer):
-
-    class Meta:
-        model = MissionCategory
 
 
 class BadgeSerializer(serializers.ModelSerializer):

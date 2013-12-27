@@ -20,7 +20,7 @@ def get_local_ip_address(target):
     return ipaddr
 
 # Server Socket
-bind = get_local_ip_address('1.1.1.1') + ':8080'
+bind = get_local_ip_address('127.0.0.1') + ':8001'
 backlog = 2048
 
 # Worker Processes

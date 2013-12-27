@@ -18,8 +18,7 @@ from rest_framework.decorators import action, link
 
 # Project
 from couple_mission.apps.uai.models import Badge, Title
-from couple_mission.apps.couple.models import CoupleMission
-from couple_mission.apps.uai.serializers import MissionCategorySerializer, BadgeSerializer, TitleSerializer
+from couple_mission.apps.uai.serializers import BadgeSerializer, TitleSerializer
 
 # Project Libs
 from couple_mission.libs.common.string import sanitize

@@ -5,8 +5,7 @@ from dateutil import parser
 from django.contrib.auth.models import User
 from django.utils.translation import ugettext as _
 
-from couple_mission.apps.uai.models import Mission
-from couple_mission.apps.couple.models import CoupleMission
+from couple_mission.apps.mission.models import Mission, UserMission
 from couple_mission.apps.couple.controller import CoupleController
 from couple_mission.apps.contents.models import Photo, Letter
 
@@ -27,14 +26,14 @@ class MissionHandler():
         new_cleared_missions = []
         for mission_pk in mission_pks:
             couple_mission = self.do_mission(mission_pk)
-            if couple_mission.status == CoupleMission.REWARDABLE:
+            if couple_mission.status == UserMission.REWARDABLE:
                 new_cleared_missions.append(couple_mission)
 
         return new_cleared_missions
 
     def get_uncleared_missions(self):
-        couple_missions = CoupleMission.objects.filter(
-            couple=self.couple).exclude(status=CoupleMission.REWARDABLE).exclude(status=CoupleMission.DONE).exclude(status=CoupleMission.AVAILABLE)
+        couple_missions = UserMission.objects.filter(
+            couple=self.couple).exclude(status=UserMission.REWARDABLE).exclude(status=UserMission.DONE).exclude(status=UserMission.AVAILABLE)
 
         if not couple_missions.exists():
             un_cleared_mission_pks = []
@@ -55,7 +54,7 @@ class MissionHandler():
         사진 1개 업로드 하기 미션
         """
         mission = Mission.objects.get(pk=pk)
-        couple_mission = CoupleMission.objects.get(
+        couple_mission = UserMission.objects.get(
             mission=mission, couple=self.couple)
         started_datetime = couple_mission.started_datetime
 
@@ -66,7 +65,7 @@ class MissionHandler():
 
         return couple_mission
         mission = Mission.objects.get(pk=pk)
-        couple_mission = CoupleMission.objects.get(
+        couple_mission = UserMission.objects.get(
             mission=mission, couple=self.couple)
         return couple_mission
 
@@ -75,7 +74,7 @@ class MissionHandler():
         편지 1개 업로드 하기 미션
         """
         mission = Mission.objects.get(pk=pk)
-        couple_mission = CoupleMission.objects.get(
+        couple_mission = UserMission.objects.get(
             mission=mission, couple=self.couple)
         started_datetime = couple_mission.started_datetime
         if Letter.objects.filter(created_at__gte=started_datetime).exists():
@@ -97,7 +96,7 @@ class OneTimeMissionHandler():
         self.couple = CoupleController.get_couple(self.user)
 
         self.mission = Mission.objects.get(id=mission_id)
-        self.couple_mission, created = CoupleMission.objects.get_or_create(
+        self.couple_mission, created = UserMission.objects.get_or_create(
             couple=self.couple, mission=self.mission)
 
     def has_cleared(self):
@@ -169,7 +168,7 @@ class OneTimeMissionHandler():
         userprofile.save()
         couple.save()
 
-        self.couple_mission.status = CoupleMission.REWARDABLE
+        self.couple_mission.status = UserMission.REWARDABLE
         self.couple_mission.save()
 
         return True

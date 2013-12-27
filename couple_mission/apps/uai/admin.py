@@ -1,15 +1,7 @@
 from django.contrib import admin
 
 # Project
-from couple_mission.apps.uai.models import MissionCategory, Mission, Badge, Title
-
-
-class AdminMissionCategory(admin.ModelAdmin):
-    list_display = ('id', 'name')
-
-
-class AdminMission(admin.ModelAdmin):
-    list_display = ('id', 'category', 'title', 'description', 'image', 'point')
+from couple_mission.apps.uai.models import Badge, Title
 
 
 class AdminBadge(admin.ModelAdmin):
@@ -19,7 +11,5 @@ class AdminBadge(admin.ModelAdmin):
 class AdminTitle(admin.ModelAdmin):
     list_display = ('id', 'name')
 
-admin.site.register(MissionCategory, AdminMissionCategory)
-admin.site.register(Mission, AdminMission)
 admin.site.register(Badge, AdminBadge)
 admin.site.register(Title, AdminTitle)

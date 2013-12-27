@@ -17,6 +17,7 @@ class Migration(SchemaMigration):
             ('gender', self.gf('django.db.models.fields.CharField')(max_length=1, null=True, blank=True)),
             ('image', self.gf('django.db.models.fields.files.ImageField')(max_length=100, null=True, blank=True)),
             ('starter', self.gf('django.db.models.fields.BooleanField')(default=False)),
+            ('mission', self.gf('django.db.models.fields.BooleanField')(default=False)),
         ))
         db.send_create_signal(u'account', ['UserProfile'])
 
@@ -33,6 +34,7 @@ class Migration(SchemaMigration):
             'created_at': ('django.db.models.fields.DateTimeField', [], {'auto_now_add': 'True', 'blank': 'True'}),
             'gender': ('django.db.models.fields.CharField', [], {'max_length': '1', 'null': 'True', 'blank': 'True'}),
             'image': ('django.db.models.fields.files.ImageField', [], {'max_length': '100', 'null': 'True', 'blank': 'True'}),
+            'mission': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
             'starter': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
             'updated_at': ('django.db.models.fields.DateTimeField', [], {'auto_now': 'True', 'blank': 'True'}),
             'user': ('django.db.models.fields.related.OneToOneField', [], {'to': u"orm['auth.User']", 'unique': 'True', 'primary_key': 'True'})

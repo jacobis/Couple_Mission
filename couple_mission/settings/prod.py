@@ -20,6 +20,11 @@ DATABASES = {
 # END DATABASE CONFIGURATION
 
 
+# PROD CONFIGURATION
+CLOUD_FILESYSTEM = True
+# END PROD CONFIGURATION
+
+
 # EMAIL CONFIGURATION
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#email-backend
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
@@ -51,3 +56,10 @@ SERVER_EMAIL = EMAIL_HOST_USER
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#allowed-hosts
 ALLOWED_HOSTS = ['207.46.132.251']
 # END ALLOWED HOST CONFIGURATION
+
+
+# STORAGE CONFIGURATION
+AZURE_CONTENTS_ACCOUNT_NAME = 'couplemission'
+AZURE_CONTENTS_ACCOUNT_KEY = 'MdVyDc5ZLUwj/jchMZe+Jt1mAtYpWeQdRLZxYAc2VWFuW2lss9K+eJtVTY3xwUqj+TwdBZNtTwf7V3y2U0KZpQ=='
+CONTENTS_BASE_URL = 'http://couplemission.blob.core.windows.net/'
+# END STORAGE CONFIGURATION

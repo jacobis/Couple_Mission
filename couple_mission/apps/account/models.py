@@ -17,7 +17,7 @@ class UserProfile(TimeStampModel):
     birthdate = models.DateField("Birth Date", null=True, blank=True)
     gender = models.CharField("Gender", max_length=1, null=True, blank=True)
     image = models.ImageField(
-        "Image", upload_to='user_profile/', storage=getfilesystem(), null=True, blank=True)
+        "Image", upload_to='user_profile/', storage=getfilesystem('usercontents'), null=True, blank=True)
     starter = models.BooleanField("Starter", default=False)
     mission = models.BooleanField("Mission", default=False)
 

@@ -15,7 +15,6 @@ class Migration(SchemaMigration):
             ('updated_at', self.gf('django.db.models.fields.DateTimeField')(auto_now=True, blank=True)),
             ('user', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['auth.User'])),
             ('couple', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['couple.Couple'])),
-            ('couple_mission', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['couple.CoupleMission'])),
             ('points', self.gf('django.db.models.fields.IntegerField')(default='0')),
         ))
         db.send_create_signal(u'points', ['Points'])
@@ -73,46 +72,14 @@ class Migration(SchemaMigration):
             'partner_b': ('django.db.models.fields.related.ForeignKey', [], {'blank': 'True', 'related_name': "'partner_b'", 'null': 'True', 'to': u"orm['auth.User']"}),
             'updated_at': ('django.db.models.fields.DateTimeField', [], {'auto_now': 'True', 'blank': 'True'})
         },
-        u'couple.couplemission': {
-            'Meta': {'ordering': "['-updated_at']", 'object_name': 'CoupleMission', 'db_table': "'couple_mission'"},
-            'claered_datetime': ('django.db.models.fields.DateTimeField', [], {'null': 'True', 'blank': 'True'}),
-            'couple': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['couple.Couple']"}),
-            'created_at': ('django.db.models.fields.DateTimeField', [], {'auto_now_add': 'True', 'blank': 'True'}),
-            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'mission': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['uai.Mission']"}),
-            'started_datetime': ('django.db.models.fields.DateTimeField', [], {'null': 'True', 'blank': 'True'}),
-            'status': ('django.db.models.fields.IntegerField', [], {'default': '0'}),
-            'updated_at': ('django.db.models.fields.DateTimeField', [], {'auto_now': 'True', 'blank': 'True'})
-        },
         u'points.points': {
             'Meta': {'object_name': 'Points', 'db_table': "'points'"},
             'couple': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['couple.Couple']"}),
-            'couple_mission': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['couple.CoupleMission']"}),
             'created_at': ('django.db.models.fields.DateTimeField', [], {'auto_now_add': 'True', 'blank': 'True'}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'points': ('django.db.models.fields.IntegerField', [], {'default': "'0'"}),
             'updated_at': ('django.db.models.fields.DateTimeField', [], {'auto_now': 'True', 'blank': 'True'}),
             'user': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['auth.User']"})
-        },
-        u'uai.mission': {
-            'Meta': {'ordering': "['created_at']", 'object_name': 'Mission'},
-            'category': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['uai.MissionCategory']"}),
-            'created_at': ('django.db.models.fields.DateTimeField', [], {'auto_now_add': 'True', 'blank': 'True'}),
-            'description': ('django.db.models.fields.TextField', [], {'default': "''", 'null': 'True', 'blank': 'True'}),
-            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'image': ('django.db.models.fields.files.ImageField', [], {'max_length': '100', 'null': 'True', 'blank': 'True'}),
-            'is_active': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
-            'point': ('django.db.models.fields.IntegerField', [], {'default': "'0'"}),
-            'title': ('django.db.models.fields.CharField', [], {'max_length': '200'}),
-            'updated_at': ('django.db.models.fields.DateTimeField', [], {'auto_now': 'True', 'blank': 'True'})
-        },
-        u'uai.missioncategory': {
-            'Meta': {'object_name': 'MissionCategory', 'db_table': "'uai_mission_category'"},
-            'created_at': ('django.db.models.fields.DateTimeField', [], {'auto_now_add': 'True', 'blank': 'True'}),
-            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'identity': ('django.db.models.fields.CharField', [], {'max_length': '10'}),
-            'name': ('django.db.models.fields.CharField', [], {'max_length': '100'}),
-            'updated_at': ('django.db.models.fields.DateTimeField', [], {'auto_now': 'True', 'blank': 'True'})
         }
     }
 
